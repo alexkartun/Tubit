@@ -1,0 +1,12 @@
+.jfx-text-field {
+
+    -jfx-focus-color: red;
+    -jfx-unfocus-color: red;
+    -fx-prompt-text-fill: red;
+}
+.jfx-password-field {
+
+    -jfx-focus-color: red;
+    -jfx-unfocus-color: red;
+    -fx-prompt-text-fill: red;
+}
