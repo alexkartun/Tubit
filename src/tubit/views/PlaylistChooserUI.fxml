@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600" prefWidth="800" styleClass="parent" stylesheets="@../../resources/css/stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tubit.controllers.PlaylistChooserUIController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="597.0" prefWidth="279.0" style="-fx-background-color: #6747cd;">
+            <children>
+                <ImageView fitHeight="115.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true" styleClass="playlistImg">
+                    <image>
+                        <Image url="@../../resources/logos/1.png" />
+                    </image>
+                </ImageView>
+                <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="40.0" text="Tubit" textFill="WHITE">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                    <effect>
+                        <DropShadow />
+                    </effect>      
+                </Label>
+            </children>
+        </VBox>
+        <Pane layoutX="286.0" prefHeight="605.0" prefWidth="513.0">
+            <children>
+                <HBox alignment="CENTER" layoutX="45.0" layoutY="133.0" prefHeight="120.0" prefWidth="424.0" spacing="10.0" style="-fx-background-color: #9E8FCD;" styleClass="playlistsContainer">
+                    <children>
+                        <ImageView fx:id="pl1" fitHeight="80.0" fitWidth="80.0" />
+                        <ImageView fx:id="pl2" fitHeight="80.0" fitWidth="80.0" />
+                        <ImageView fx:id="pl3" fitHeight="80.0" fitWidth="80.0" />
+                        <ImageView fx:id="pl4" fitHeight="80.0" fitWidth="80.0" />
+                    </children>
+                </HBox>
+                <FontAwesomeIcon iconName="CLOSE" layoutX="489.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
+                <FontAwesomeIcon iconName="ARROW_LEFT" layoutY="22.0" onMouseClicked="#backToMenu" size="1.5em" stroke="WHITE" styleClass="backBtn" />
+                <FontAwesomeIcon iconName="BACKWARD" layoutX="20.0" layoutY="201.0" onMouseClicked="#backwardList" size="20" stroke="WHITE" styleClass="backBtn" text="" />
+                <FontAwesomeIcon iconName="FORWARD" layoutX="475.0" layoutY="200.0" onMouseClicked="#forwardList" size="20" stroke="WHITE" styleClass="backBtn" />
+                <Label layoutX="78.0" layoutY="101.0" text="What is your mood?" textFill="#545454">
+                    <font>
+                        <Font name="Ebrima Bold" size="25.0" />
+                    </font>
+                    <effect>
+                        <Glow />
+                    </effect>   
+                </Label>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

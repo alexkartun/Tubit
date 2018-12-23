@@ -4,24 +4,14 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import db.DBUtils;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class RegistrationUIController implements Initializable {
-
-    private double xOffset = 0;
-    private double yOffset = 0;
-
-    @FXML
-    private AnchorPane rootPane;
-
+public class RegistrationUIController extends TubitBaseController {
+    
+    
     @FXML
     private JFXTextField usernameInput;
     @FXML
@@ -31,34 +21,9 @@ public class RegistrationUIController implements Initializable {
     @FXML
     private JFXPasswordField confirmPasswordInput;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        makeStageDraggable();
-    }
-
-    private void makeStageDraggable() {
-        rootPane.setOnMousePressed((MouseEvent event) -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        rootPane.setOnMouseDragged((MouseEvent event) -> {
-            rootPane.getScene().getWindow().setX(event.getScreenX() - xOffset);
-            rootPane.getScene().getWindow().setY(event.getScreenY() - yOffset);
-            rootPane.getScene().setFill(Color.TRANSPARENT);
-        });
-    }
-
     @FXML
     private void backToMenu(MouseEvent event) throws IOException {
-        AnchorPane pane = (AnchorPane) FXMLLoader.load(getClass().getResource("/tubit/views/MainUI.fxml"));
-        rootPane.getChildren().removeAll();
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void closeApp(MouseEvent event) {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
+        refreshPage("/tubit/views/LoginUI.fxml");
     }
 
     @FXML

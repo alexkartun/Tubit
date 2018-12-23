@@ -13,55 +13,27 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class MainUIController implements Initializable {
+public class MainUIController extends TubitBaseController {
 
-    private double xOffset = 0;
-    private double yOffset = 0;
-
-    @FXML
-    private AnchorPane rootPane;
     @FXML
     private JFXTextField usernameInput;
     @FXML
     private JFXPasswordField passwordInput;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        makeStageDraggable();
-    }
-
-    private void makeStageDraggable() {
-        rootPane.setOnMousePressed((MouseEvent event) -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-        rootPane.setOnMouseDragged((MouseEvent event) -> {
-            rootPane.getScene().getWindow().setX(event.getScreenX() - xOffset);
-            rootPane.getScene().getWindow().setY(event.getScreenY() - yOffset);
-        });
-    }
-
     @FXML
     private void openRegistration(MouseEvent event) throws IOException {
-        AnchorPane pane = (AnchorPane) FXMLLoader.load(getClass().getResource("/tubit/views/RegistrationUI.fxml"));
-        rootPane.getChildren().removeAll();
-        rootPane.getChildren().setAll(pane);
+        refreshPage("/tubit/views/RegistrationUI.fxml");
     }
 
     @FXML
-    private void closeApp(MouseEvent event) {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    private void loginAction(MouseEvent event) {
+    private void loginAction(MouseEvent event) throws IOException {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         if (validateInputs(username, password)) {
             if (DBUtils.getInstance().checkClientInDB(username, password)) {
                 //TODO: Game menu
                 System.out.println("Connected");
+                refreshPage("/tubit/views/PlaylistChooserUI.fxml");
             } else {
                  System.out.println("Not");
             }
@@ -88,5 +60,4 @@ public class MainUIController implements Initializable {
         }
         return correctInputs;
     }
-
 }

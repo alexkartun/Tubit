@@ -36,3 +36,22 @@
 .backBtn:hover {
     -fx-fill: #6747CD;
 }
+
+.playlistsContainer {
+-fx-background-radius: 30;
+-fx-border-radius: 30;
+-fx-border-width:2;
+-fx-border-color:gray;
+}
+
+.playlistImg {
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    opacity: 0.5;
+}
+
+.playlistImg:hover {
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    opacity: 1;
+}

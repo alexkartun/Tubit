@@ -6,7 +6,7 @@ public class DBUtils {
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String USER = "root";
-    private final String PASS = "alex1992";
+    private final String PASS = "204717664";
     /**
      * 
      * @return 
