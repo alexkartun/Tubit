@@ -47,7 +47,6 @@ public class PlaylistChooserUIController extends TubitBaseController {
         playlistLinker = new HashMap<>();
         playlist_current = 0;
         c_moodsPlaylists = model.getMoodPlaylists();
-        pl1.getStyleClass().add("playlistImg");
         initPlaylistMap(playlist_current);
     }
     
@@ -77,15 +76,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
             playlistLinker.clear();
             initPlaylistMap(--playlist_current);
         }
-        refreshPage("/tubit/views/LoginUI.fxml");
     }
     
     @FXML
     private void forwardList(MouseEvent event) throws IOException {
-        if (playlist_current < NUM_OF_SHOWN_PLAYLISTS) {
+        if (playlist_current < NUM_OF_SHOWN_PLAYLISTS - 1) {
             playlistLinker.clear();
             initPlaylistMap(++playlist_current);
         }
-        refreshPage("/tubit/views/LoginUI.fxml");
     }
 }

@@ -5,6 +5,7 @@
  */
 package tubit.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.image.Image;
 /**
@@ -12,15 +13,27 @@ import javafx.scene.image.Image;
  * @author Ofir
  */
 public class Playlist {
-    private String id;
+    private int id;
     private String name;
     private Image icon;
+    private int popularity;
     private List<Song> songsList;
     
-    public Playlist(String id, String name, Image icon) {
+    // for user made playlists
+    public Playlist(int id, String name, Image icon, int p, List<Song> songs) {
         this.id = id;
         this.name = name;
         this.icon = icon;
+        this.popularity = p;
+        songsList = songs;
+    }
+    
+    // for admin playlists
+    public Playlist(String name, Image img, List<Song> songs) {
+        this.name = name;
+        this.icon = img;
+        this.popularity = -1;
+        songsList = songs;
     }
     
     public String getName() {
@@ -30,6 +43,11 @@ public class Playlist {
     public Image getImage() {
         return icon;
     }
+    
+    public List<Song> getSongsList() {
+        return songsList;
+    }
+    
 }
 
 

@@ -23,7 +23,7 @@ public class RegistrationUIController extends TubitBaseController {
 
     @FXML
     private void backToMenu(MouseEvent event) throws IOException {
-        refreshPage("/tubit/views/LoginUI.fxml");
+        refreshPage("/tubit/views/MainUI.fxml");
     }
 
     @FXML
