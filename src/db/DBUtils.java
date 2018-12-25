@@ -159,12 +159,12 @@ public class DBUtils {
                 Class.forName(JDBC_DRIVER);
                 connection = DriverManager.getConnection(DB_URL, USER, PASS);
                 // retrives all songs with given genre.
-                String sql = "SELECT songs.songId, songs.songName, songs.songDuration, songs.yearReleased singers.singerName, albums.albumName\n"
+                String sql = "SELECT songs.songId, songs.songName, songs.songDuration, songs.yearReleased, singers.singerName, albums.albumName\n"
                         + "FROM songs, singers, albums\n"
                         + "WHERE singers.id = albums.singerId AND songs.albumId = albums.albumId and singers.genre = ?\n"
                         + "ORDER BY RAND() LIMIT 16";
-                statement.setString(1, gen);
                 statement = connection.prepareStatement(sql);
+                statement.setString(1, gen);
                 ResultSet result = statement.executeQuery();
                 // query excuted correctly
                 List<Song> songs = new ArrayList<>();

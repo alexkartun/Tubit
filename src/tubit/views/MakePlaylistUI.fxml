@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tubit.views.MakePlaylistUIController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="sidebar">
+            <children>
+                <ImageView fitHeight="115.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../resources/logos/icon.png" />
+                    </image>
+                </ImageView>
+                <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="40.0" text="Tubit" textFill="WHITE">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                    <effect>
+                        <DropShadow />
+                    </effect>      
+                </Label>
+            </children>
+        </VBox>
+        <Pane layoutX="287.0" prefHeight="605.0" prefWidth="513.0">
+            <children>
+                <FontAwesomeIcon iconName="CLOSE" layoutX="489.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
+                <FontAwesomeIcon iconName="ARROW_LEFT" layoutY="22.0" onMouseClicked="#backToPlaylistChooser" size="1.5em" stroke="WHITE" styleClass="backBtn" />
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

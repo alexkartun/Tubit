@@ -27,7 +27,7 @@ public class RegistrationUIController extends TubitBaseController {
     }
 
     @FXML
-    private void registrationAction(MouseEvent event) {
+    private void registrationAction(MouseEvent event) throws IOException {
         String username = this.usernameInput.getText();
         String email = this.emailnput.getText();
         String password = this.passwordInput.getText();
@@ -36,6 +36,7 @@ public class RegistrationUIController extends TubitBaseController {
             if (DBUtils.getInstance().updateDB(username, email, password)) {
                 //TODO: Game menu
                 System.out.println("Connected");
+                refreshPage("/tubit/views/MainUI.fxml");
             } else {
                  System.out.println("Not");
             }
