@@ -37,4 +37,9 @@ public class MakePlaylistUIController extends TubitBaseController {
         refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
     
+    @FXML
+    private void addSongToPlaylist(MouseEvent event) throws IOException {
+        refreshPage("/tubit/views/PlaylistChooserUI.fxml");
+    }
+    
 }

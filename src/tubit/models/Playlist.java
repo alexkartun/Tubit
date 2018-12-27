@@ -5,7 +5,6 @@
  */
 package tubit.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.image.Image;
 /**
@@ -18,14 +17,15 @@ public class Playlist {
     private Image icon;
     private int popularity;
     private List<Song> songsList;
-    
+    private boolean isAdminMade;
     // for user made playlists
-    public Playlist(int id, String name, Image icon, int p, List<Song> songs) {
+    public Playlist(int id, String name, Image icon, int p, List<Song> songs, boolean isAdminMade) {
         this.id = id;
         this.name = name;
         this.icon = icon;
         this.popularity = p;
-        songsList = songs;
+        this.songsList = songs;
+        this.isAdminMade = isAdminMade;
     }
     
     // for admin playlists

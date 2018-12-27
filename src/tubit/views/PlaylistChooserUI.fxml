@@ -82,7 +82,11 @@
                         <RadioButton mnemonicParsing="false" text="Recently made" toggleGroup="$userPlaylistFilter"/>
                     </children>
                 </VBox>
-                <Button layoutX="45.0" layoutY="534.0" mnemonicParsing="false" text="Make one on your own!" onMouseClicked="#gotoPlaylistMaker" styleClass="loginBtn"/>
+                <Button layoutX="45.0" layoutY="534.0" mnemonicParsing="false" text="Make one on your own!" onMouseClicked="#gotoPlaylistMaker" styleClass="loginBtn">
+                     <font>
+                        <Font name="Ebrima Bold" size="20.0" />
+                    </font>
+                </Button>
                 <Label layoutX="58.0" layoutY="436.0" text="Show playlists based on:" >
                     <effect>
                         <Glow />

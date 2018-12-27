@@ -14,7 +14,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tubit.views.MakePlaylistUIController">
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tubit.controllers.MakePlaylistUIController">
     <children>
         <VBox alignment="CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="sidebar">
             <children>
@@ -33,10 +33,44 @@
                 </Label>
             </children>
         </VBox>
-        <Pane layoutX="287.0" prefHeight="605.0" prefWidth="513.0">
+        <Pane layoutX="287.0" layoutY="0.0" prefHeight="605.0" prefWidth="513.0">
             <children>
                 <FontAwesomeIcon iconName="CLOSE" layoutX="489.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
                 <FontAwesomeIcon iconName="ARROW_LEFT" layoutY="22.0" onMouseClicked="#backToPlaylistChooser" size="1.5em" stroke="WHITE" styleClass="backBtn" />
+                <Label layoutX="15.0" layoutY="80" text="Playlist name:" >
+                    <font>
+                        <Font name="Ebrima Bold" size="25.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="playlistName" layoutX="210.0" layoutY="85.0" prefWidth="250.0" />
+                <JFXScrollPane layoutX="15.0" layoutY="120.0" prefHeight="340.0" prefWidth="220.0" styleClass="scroll-pane">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="220.0" styleClass="scroll-inside"/>
+                    </content>
+                </JFXScrollPane>
+                <JFXScrollPane layoutX="275.0" layoutY="120.0" prefHeight="340.0" prefWidth="220.0" styleClass="scroll-pane">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="340.0" prefWidth="220.0" styleClass="scroll-inside"/>
+                    </content>
+                </JFXScrollPane>
+                <FontAwesomeIcon iconName="ARROW_CIRCLE_RIGHT" layoutX="242" layoutY="280" onMouseClicked="#addSongToPlaylist" size="2.5em" stroke="WHITE" styleClass="backBtn" />
+                <Label layoutX="20.0" layoutY="470.0" text="Search:" >
+                    <font>
+                        <Font name="Ebrima Bold" size="15.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="searchField" layoutX="95.0" layoutY="460.0" prefWidth="250.0" />
+                <HBox layoutX="20.0" layoutY="510.0" spacing="10.0">
+                    <fx:define>
+                        <ToggleGroup fx:id="songSearchingSubject"/>
+                    </fx:define>
+                    <children>
+                        <RadioButton layoutX="20.0" layoutY="560.0" mnemonicParsing="false" text="Song name" toggleGroup="$songSearchingSubject" selected="true"/>
+                        <RadioButton layoutX="120.0" layoutY="560.0" mnemonicParsing="false" text="Artist name" toggleGroup="$songSearchingSubject"/>
+                        <RadioButton layoutX="220.0" layoutY="560.0" mnemonicParsing="false" text="Album name" toggleGroup="$songSearchingSubject"/>
+                        <RadioButton layoutX="320.0" layoutY="560.0" mnemonicParsing="false" text="Genre" toggleGroup="$songSearchingSubject"/>
+                    </children>
+                </HBox>
             </children>
         </Pane>
     </children>

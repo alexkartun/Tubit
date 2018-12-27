@@ -15,7 +15,7 @@ public class DBUtils {
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String USER = "root";
-    private final String PASS = "204717664";
+    private final String PASS = "alex1992";
 
     /**
      *
@@ -149,53 +149,68 @@ public class DBUtils {
         return genres;
     }
 
-    public List<Playlist> getAdmidPlaylists(List<String> genres, Map<String, Pair<String, Image>> moodMapper) {
-        List<Playlist> adminPlaylists = new ArrayList<>();
-
+    public List<Playlist> getPlaylists(boolean isAdmin, boolean isPopular) {
+        List<Playlist> playlists = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
-        for (String gen : genres) {
-            try {
-                Class.forName(JDBC_DRIVER);
-                connection = DriverManager.getConnection(DB_URL, USER, PASS);
-                // retrives all songs with given genre.
-                String sql = "SELECT songs.songId, songs.songName, songs.songDuration, songs.yearReleased, singers.singerName, albums.albumName\n"
-                        + "FROM songs, singers, albums\n"
-                        + "WHERE singers.id = albums.singerId AND songs.albumId = albums.albumId and singers.genre = ?\n"
-                        + "ORDER BY RAND() LIMIT 16";
-                statement = connection.prepareStatement(sql);
-                statement.setString(1, gen);
-                ResultSet result = statement.executeQuery();
-                // query excuted correctly
+        try {
+            Class.forName(JDBC_DRIVER);
+            connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            String playListsSql;
+            if (isAdmin) {
+                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                    + "FROM playlists\n"
+                    + "WHERE isAdminMade = ?";
+            }
+            else if (isPopular) {
+                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                    + "FROM playlists\n"
+                    + "WHERE isAdminMade = ? AND playlists.popularity > (SELECT AVG(playlists.popularity)\n" +
+                      "FROM playlists)";
+            } else {
+                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                    + "FROM playlists\n"
+                    + "WHERE isAdminMade = ? AND playlists.playlistId > (SELECT AVG(playlists.playlistId)\n" +
+                      "FROM playlists)";
+            }
+            statement = connection.prepareStatement(playListsSql);
+            statement.setBoolean(1, isAdmin);
+            ResultSet playListResult = statement.executeQuery();
+            while (playListResult.next() == true) {    
                 List<Song> songs = new ArrayList<>();
-                while (result.next() == true) {
-                    Song song = new Song(result.getInt("songId"), result.getString("songName"),
-                    result.getInt("songDuration"), result.getInt("yearReleased"),
-                            result.getString("singerName"), result.getString("albumName"));
+                String songsSql = "SELECT songs.songId, songs.songName, songs.songDuration, songs.yearReleased, singers.singerName, albums.albumName\n"
+                                  + "FROM songs, singers, albums, playlists_songs, playlists\n"
+                                  + "WHERE playlists_songs.playlistId = ? AND songs.songId = playlists_songs.songId AND songs.albumId = albums.albumId AND albums.singerId = singers.id";   
+                statement = connection.prepareStatement(songsSql);
+                statement.setInt(1, playListResult.getInt("playListId"));
+                ResultSet songsResult = statement.executeQuery();
+                while (songsResult.next() == true) {
+                    Song song = new Song(songsResult.getInt("songId"), songsResult.getString("songName"),
+                        songsResult.getInt("songDuration"), songsResult.getInt("yearReleased"),
+                        songsResult.getString("singerName"), songsResult.getString("albumName"));
                     songs.add(song);
+                }   
+                playlists.add(new Playlist(playListResult.getInt("playListId"), playListResult.getString("playListName"), new Image(playListResult.getString("playListImage")), playListResult.getInt("popularity"), songs, isAdmin));
+            }
+                
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error on creating connection or query execution...");
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error on closing statement...");
                 }
-                Pair<String, Image> mood = moodMapper.get(gen);
-                adminPlaylists.add(new Playlist(mood.getKey(), mood.getValue(), songs));
-            } catch (SQLException | ClassNotFoundException ex) {
-                System.out.println("Error on creating connection or query execution...");
-            } finally {
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (SQLException ex) {
-                        System.out.println("Error on closing statement...");
-                    }
-                }
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException ex) {
-                        System.out.println("Error on closing connection...");
-                    }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error on closing connection...");
                 }
             }
         }
-
-        return adminPlaylists;
+        return playlists;
     }
 }
