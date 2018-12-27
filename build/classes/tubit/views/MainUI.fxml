@@ -41,7 +41,7 @@
                 </Label>
             </children>
         </VBox>
-        <Pane layoutX="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #FFF;">
+        <Pane layoutX="400.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #FFF;" styleClass="white-sidebar">
             <children>
                 <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="19.0" layoutY="55.0" pickOnBounds="true" smooth="false">
                     <image>

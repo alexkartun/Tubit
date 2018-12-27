@@ -2,8 +2,13 @@
     -fx-background-color: white;
 }
 .sidebar {
-    -fx-background-image: url("/resources/images/background_purple8.png");
+    -fx-background-image: url("/resources/images/background_purple.png");
     -fx-background-color: #6747CD;
+}
+.white-sidebar {
+    -fx-background-image: url("/resources/images/background_white.jpg");
+    background-repeat: no-repeat;
+    background-size: auto;
 }
 .forgetBtn {
     -fx-text-fill: #a3a3a3; 
@@ -43,6 +48,12 @@
 -fx-border-radius: 30;
 -fx-border-width:2;
 -fx-border-color:gray;
+}
+
+.image-view-wrapper:border {
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
 }
 
 .playlistImg {

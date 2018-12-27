@@ -15,6 +15,11 @@ import javafx.scene.layout.AnchorPane;
 import tubit.controllers.TubitBaseController;
 
 /**
+ * <fx:define>
+ * <ToggleGroup fx:id="songSearchingSubject"/>
+ * </fx:define>
+ */
+/**
  * FXML Controller class
  *
  * @author Ofir
@@ -30,16 +35,27 @@ public class MakePlaylistUIController extends TubitBaseController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void backToPlaylistChooser(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
-    
+
     @FXML
     private void addSongToPlaylist(MouseEvent event) throws IOException {
-        refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
-    
+
+    @FXML
+    private void extractSongs(MouseEvent event) throws IOException {
+    }
+
+    @FXML
+    private void uploadPhoto(MouseEvent event) throws IOException {
+    }
+
+    @FXML
+    private void uploadPlaylistToDB(MouseEvent event) throws IOException {
+
+    }
 }

@@ -26,7 +26,6 @@ import tubit.models.PlaylistChooserModel.FILTER;
  * @author Ofir
  */
 public class PlaylistChooserUIController extends TubitBaseController {
-
     static Playlist chosenPlaylist;
     private final int NUM_OF_SHOWN_PLAYLISTS = 4;
     List<Playlist> c_moodsPlaylists;
