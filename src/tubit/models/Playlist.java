@@ -28,14 +28,6 @@ public class Playlist {
         this.isAdminMade = isAdminMade;
     }
     
-    // for admin playlists
-    public Playlist(String name, Image img, List<Song> songs) {
-        this.name = name;
-        this.icon = img;
-        this.popularity = -1;
-        songsList = songs;
-    }
-    
     public String getName() {
         return name;
     }
