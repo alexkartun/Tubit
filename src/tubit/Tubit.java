@@ -11,7 +11,7 @@ public class Tubit extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("views/MakePlaylistUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("views/PlaylistChooserUI.fxml"));
         Scene scene = new Scene(root);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(scene);

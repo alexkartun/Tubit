@@ -25,7 +25,7 @@ public class DBUtils {
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String USER = "root";
-    private final String PASS = "204717664";
+    private final String PASS = "alex1992";
 
     /**
      *
@@ -172,18 +172,18 @@ public class DBUtils {
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
             String playListsSql = null;
             if (isAdmin) {
-                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                playListsSql = "SELECT playlists.id, playlists.name, playlists.popularity, playlists.image\n"
                         + "FROM playlists\n"
-                        + "WHERE isAdminMade = ?";
+                        + "WHERE is_admin_made = ?";
             } else if (f == FILTER.POPULARITY) {
-                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                playListsSql = "SELECT playlists.id, playlists.name, playlists.popularity, playlists.image\n"
                         + "FROM playlists\n"
-                        + "WHERE isAdminMade = ? AND playlists.popularity > (SELECT AVG(playlists.popularity)\n"
+                        + "WHERE is_admin_made = ? AND playlists.popularity > (SELECT AVG(playlists.popularity)\n"
                         + "FROM playlists)";
             } else if (f == FILTER.RECENT) {
-                playListsSql = "SELECT playlists.playListId, playlists.playListName, playlists.popularity, playlists.playListImage\n"
+                playListsSql = "SELECT playlists.id, playlists.name, playlists.popularity, playlists.image\n"
                         + "FROM playlists\n"
-                        + "WHERE isAdminMade = ? AND playlists.playlistId > (SELECT AVG(playlists.playlistId)\n"
+                        + "WHERE is_admin_made = ? AND playlists.id > (SELECT AVG(playlists.id)\n"
                         + "FROM playlists)";
             }
             statement = connection.prepareStatement(playListsSql);
@@ -191,16 +191,16 @@ public class DBUtils {
             ResultSet playListResult = statement.executeQuery();
             while (playListResult.next() == true) {
                 List<Song> songs = new ArrayList<>();
-                String songsSql = "SELECT songs.songId, songs.songName, songs.songDuration, songs.yearReleased, singers.singerName, albums.albumName\n"
+                String songsSql = "SELECT songs.id, songs.name, songs.duration, songs.year_released, songs.url, singers.name, albums.name\n"
                         + "FROM songs, singers, albums, playlists_songs, playlists\n"
-                        + "WHERE playlists_songs.playlistId = ? AND songs.songId = playlists_songs.songId AND songs.albumId = albums.albumId AND albums.singerId = singers.id";
+                        + "WHERE playlists_songs.playlistId = ? AND playlists_songs.songId = songs.id AND songs.albumId = albums.id AND songs.singerId = singers.id";
                 statement = connection.prepareStatement(songsSql);
-                statement.setInt(1, playListResult.getInt("playListId"));
+                statement.setInt(1, playListResult.getInt("id"));
                 ResultSet songsResult = statement.executeQuery();
                 while (songsResult.next() == true) {
-                    Song song = new Song(songsResult.getInt("songId"), songsResult.getString("songName"),
-                            songsResult.getInt("songDuration"), songsResult.getInt("yearReleased"),
-                            songsResult.getString("singerName"), songsResult.getString("albumName"));
+                    Song song = new Song(songsResult.getInt("id"), songsResult.getString("songs.name"),
+                            songsResult.getInt("duration"), songsResult.getInt("year_released"),
+                            songsResult.getString("singers.name"), songsResult.getString("albums.name"), songsResult.getString("url"));
                     songs.add(song);
                 }
                 playlists.add(createPlaylistFromDB(playListResult, songs, isAdmin));
@@ -230,9 +230,9 @@ public class DBUtils {
     private Playlist createPlaylistFromDB(ResultSet res, List<Song> songs, boolean isAdmin) {
         Playlist p = null;
         try {
-            int id = res.getInt("playListId");
-            String name = res.getString("playListName");
-            Image img = convertBlobToImage(res.getBlob("playlistImage"));
+            int id = res.getInt("id");
+            String name = res.getString("name");
+            Image img = convertBlobToImage(res.getBlob("image"));
             int popularity = res.getInt("popularity");
             p = new Playlist(id, name, img, popularity, songs, isAdmin);
         } catch (SQLException e) {

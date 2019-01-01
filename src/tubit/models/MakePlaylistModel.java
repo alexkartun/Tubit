@@ -31,9 +31,9 @@ public class MakePlaylistModel {
     public List<Song> extractSongs(SEARCH_CRITERIA c, String searchingText) {
         //return DBUtils.getInstance().getSongsByCriteria(getAttribute(c), searchingText);
         List<Song> testList = new ArrayList<>();
-        testList.add(new Song(1,"Yeahh baby", 215, 2016, "DJ Kaled", "LEchkikon"));
-        testList.add(new Song(2,"One day in your mouth", 199, 2015, "dsads", "Yohanis"));
-        testList.add(new Song(3,"Me and you", 300, 2019, "TZOOZI", "Hopa"));
+        testList.add(new Song(1,"Yeahh baby", 215, 2016, "DJ Kaled", "LEchkikon", null));
+        testList.add(new Song(2,"One day in your mouth", 199, 2015, "dsads", "Yohanis", null));
+        testList.add(new Song(3,"Me and you", 300, 2019, "TZOOZI", "Hopa", null));
         return testList;
     }
     
