@@ -7,13 +7,13 @@
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/views/MakePlaylistUI.fxml</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/controllers/TubitBaseController.java</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/views/PlaylistChooserUI.fxml</file>
-            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/controllers/MainUIController.java</file>
+            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/views/RegistrationUI.fxml</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/Tubit.java</file>
-            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/models/Song.java</file>
-            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/controllers/RegistrationUIController.java</file>
+            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/views/MainUI.fxml</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/controllers/PlaylistChooserUIController.java</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/resources/css/stylesheet.css</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/db/DBUtils.java</file>
+            <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/models/MakePlaylistModel.java</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/controllers/MakePlaylistUIController.java</file>
             <file>file:/C:/Users/Ofir/Documents/NetBeansProjects/Tubit/src/tubit/models/Playlist.java</file>
         </group>

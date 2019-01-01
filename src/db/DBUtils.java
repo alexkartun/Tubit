@@ -12,6 +12,7 @@ import java.io.InputStream;
 import javafx.scene.image.Image;
 import javafx.util.Pair;
 import javax.imageio.ImageIO;
+import tubit.models.MakePlaylistModel;
 import tubit.models.Playlist;
 import tubit.models.Playlist;
 import tubit.models.PlaylistChooserModel.FILTER;
@@ -156,6 +157,10 @@ public class DBUtils {
             }
         }
         return genres;
+    }
+    
+    public List<Song> getSongsByCriteria(String criteria, String searchField) {
+        return null;
     }
 
     public List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {

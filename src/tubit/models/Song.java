@@ -12,21 +12,37 @@ package tubit.models;
 public class Song {
     private int id;
     private String name;
-    private String artist;
+    private String singer;
     private String album;
     private int duration;
     private int yearReleased;
     
-    public Song(int id, String name, int duration, int year, String artist, String album) {
+    public Song(int id, String name, int duration, int year, String singer, String album) {
         this.id = id;
         this.name = name;
         this.duration = duration;
         this.yearReleased = year;
-        this.artist = artist;
+        this.singer = singer;
         this.album = album;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public String getSinger() {
+        return singer;
+    }
+    
+    public String getAlbum() {
+        return album;
+    }
+    
+    public int getDuration() {
+        return duration;
+    }
+    
+    public int getYear() {
+        return yearReleased;
     }
 }

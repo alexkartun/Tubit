@@ -78,8 +78,8 @@
                         <ToggleGroup fx:id="userPlaylistFilter"/>
                     </fx:define>
                     <children>
-                        <RadioButton fx:id="radioBtnPopular" mnemonicParsing="false" selected="true" text="Popularity" toggleGroup="$userPlaylistFilter"/>
-                        <RadioButton fx:id="radioBtnRecent" mnemonicParsing="false" text="Recently made" toggleGroup="$userPlaylistFilter"/>
+                        <RadioButton fx:id="radioBtnPopular" mnemonicParsing="false" selected="true" text="Popularity" toggleGroup="$userPlaylistFilter" onMouseClicked="#changeFilter"/>
+                        <RadioButton fx:id="radioBtnRecent" mnemonicParsing="false" text="Recently made" toggleGroup="$userPlaylistFilter" onMouseClicked="#changeFilter"/>
                     </children>
                 </VBox>
                 <Button layoutX="45.0" layoutY="534.0" mnemonicParsing="false" text="Make one on your own!" onMouseClicked="#gotoPlaylistMaker" styleClass="loginBtn">

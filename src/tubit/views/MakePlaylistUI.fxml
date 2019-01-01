@@ -16,7 +16,7 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" styleClass="parent" stylesheets="@../../resources/css/stylesheet.css" fx:controller="tubit.controllers.MakePlaylistUIController">
     <children>
-        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="280.0" styleClass="sidebar">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="230.0" styleClass="sidebar">
             <children>
                 <ImageView fitHeight="115.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -33,9 +33,9 @@
                 </Label>
             </children>
         </VBox>
-        <Pane layoutX="280.0" layoutY="0.0" prefHeight="600.0" prefWidth="520.0" styleClass="white-sidebar">
+        <Pane layoutX="230.0" layoutY="0.0" prefHeight="600.0" prefWidth="570.0" styleClass="white-sidebar">
             <children>
-                <FontAwesomeIcon iconName="CLOSE" layoutX="480.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
+                <FontAwesomeIcon iconName="CLOSE" layoutX="530.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
                 <FontAwesomeIcon iconName="ARROW_LEFT" layoutX="15.0" layoutY="22.0" onMouseClicked="#backToPlaylistChooser" size="1.5em" stroke="WHITE" styleClass="backBtn" />
                 <Label layoutX="15.0" layoutY="80" text="Playlist name:">
                     <font>
@@ -43,9 +43,34 @@
                     </font>
                 </Label>
                 <JFXTextField fx:id="playlistName" layoutX="210.0" layoutY="85.0" prefWidth="250.0"  />
-                <JFXScrollPane layoutX="40.0" layoutY="140.0" prefHeight="293.0" prefWidth="176.0" styleClass="scroll-bar" />
-                <JFXScrollPane layoutX="300.0" layoutY="140.0" prefHeight="293.0" prefWidth="176.0" styleClass="scroll-pane" />
-                <FontAwesomeIcon iconName="ARROW_CIRCLE_RIGHT" layoutX="242" layoutY="280" onMouseClicked="#addSongToPlaylist" size="2.5em" stroke="WHITE" styleClass="backBtn" />
+                <VBox layoutX="10.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <TableView fx:id="queriedSongs" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
+                            <columns>
+                                <TableColumn fx:id="songName" text="Song name" prefWidth="62.0"/>
+                                <TableColumn fx:id="singerName" text="Singer" prefWidth="60.0"/>
+                                <TableColumn fx:id="albumName" text="Album" prefWidth="60.0"/>
+                                <TableColumn fx:id="duration" text="Duration" prefWidth="43.0"/>
+                                <TableColumn fx:id="year" text="Year" prefWidth="35.0"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+                <FontAwesomeIcon iconName="ARROW_CIRCLE_RIGHT" layoutX="272" layoutY="280" onMouseClicked="#addSongToPlaylist" size="2.5em" stroke="WHITE" styleClass="backBtn" />
+                <VBox layoutX="300.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <TableView prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
+                            <columns>
+                                <TableColumn text="Song name" prefWidth="62.0"/>
+                                <TableColumn text="Singer" prefWidth="60.0"/>
+                                <TableColumn text="Album" prefWidth="60.0"/>
+                                <TableColumn text="Duration" prefWidth="43.0"/>
+                                <TableColumn text="Year" prefWidth="35.0"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+                
                 <Label layoutX="20.0" layoutY="445.0" text="Search:">
                     <font>
                         <Font name="Ebrima Bold" size="15.0" />
@@ -63,7 +88,7 @@
                             <ToggleGroup fx:id="songSearchingSubject"/>
                         </fx:define>
                         <RadioButton mnemonicParsing="false" selected="true" text="Song name" toggleGroup="$songSearchingSubject"/>
-                        <RadioButton mnemonicParsing="false" text="Artist name" toggleGroup="$songSearchingSubject" />
+                        <RadioButton mnemonicParsing="false" text="Singer name" toggleGroup="$songSearchingSubject" />
                         <RadioButton mnemonicParsing="false" text="Album name" toggleGroup="$songSearchingSubject" />
                     </children>
                 </HBox>

@@ -113,6 +113,12 @@ public class PlaylistChooserUIController extends TubitBaseController {
         // unreachable code.
         return null;
     }
+    
+    
+    @FXML
+    private void changeFilter(MouseEvent event) throws IOException {
+        initPlaylistMap(admin_playlist_current, user_playlist_current, getUserFilter());
+    }
 
     @FXML
     private void backToMenu(MouseEvent event) throws IOException {
@@ -135,6 +141,7 @@ public class PlaylistChooserUIController extends TubitBaseController {
         }
     }
 
+    
     @FXML
     private void user_backwardList(MouseEvent event) throws IOException {
         if (user_playlist_current > 0) {
