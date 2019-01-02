@@ -45,13 +45,13 @@
                 <JFXTextField fx:id="playlistName" layoutX="210.0" layoutY="85.0" prefWidth="250.0"  />
                 <VBox layoutX="10.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
-                        <TableView fx:id="queriedSongs" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <TableView fx:id="queriedSongsTable" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
                             <columns>
-                                <TableColumn fx:id="songName" text="Song name" prefWidth="62.0"/>
-                                <TableColumn fx:id="singerName" text="Singer" prefWidth="60.0"/>
-                                <TableColumn fx:id="albumName" text="Album" prefWidth="60.0"/>
-                                <TableColumn fx:id="duration" text="Duration" prefWidth="43.0"/>
-                                <TableColumn fx:id="year" text="Year" prefWidth="35.0"/>
+                                <TableColumn fx:id="q_songName" text="Song name" prefWidth="62.0"/>
+                                <TableColumn fx:id="q_singerName" text="Singer" prefWidth="60.0"/>
+                                <TableColumn fx:id="q_albumName" text="Album" prefWidth="60.0"/>
+                                <TableColumn fx:id="q_duration" text="Duration" prefWidth="43.0"/>
+                                <TableColumn fx:id="q_year" text="Year" prefWidth="35.0"/>
                             </columns>
                         </TableView>
                     </children>
@@ -59,13 +59,13 @@
                 <FontAwesomeIcon iconName="ARROW_CIRCLE_RIGHT" layoutX="272" layoutY="280" onMouseClicked="#addSongToPlaylist" size="2.5em" stroke="WHITE" styleClass="backBtn" />
                 <VBox layoutX="300.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
-                        <TableView prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
+                        <TableView fx:id="playlistSongsTable" prefHeight="200.0" VBox.vgrow="ALWAYS" onMouseClicked="#enableRemoveButton" styleClass="table-view">
                             <columns>
-                                <TableColumn text="Song name" prefWidth="62.0"/>
-                                <TableColumn text="Singer" prefWidth="60.0"/>
-                                <TableColumn text="Album" prefWidth="60.0"/>
-                                <TableColumn text="Duration" prefWidth="43.0"/>
-                                <TableColumn text="Year" prefWidth="35.0"/>
+                                <TableColumn fx:id="p_songName" text="Song name" prefWidth="62.0"/>
+                                <TableColumn fx:id="p_singerName" text="Singer" prefWidth="60.0"/>
+                                <TableColumn fx:id="p_albumName" text="Album" prefWidth="60.0"/>
+                                <TableColumn fx:id="p_duration" text="Duration" prefWidth="43.0"/>
+                                <TableColumn fx:id="p_year" text="Year" prefWidth="35.0"/>
                             </columns>
                         </TableView>
                     </children>
@@ -80,6 +80,11 @@
                 <Button layoutX="300.0" layoutY="445.0" mnemonicParsing="false" text="Search!" onMouseClicked="#extractSongs">
                     <font>
                         <Font name="Ebrima" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="removeChosen" layoutX="510.0" layoutY="445.0" mnemonicParsing="false" text="Remove" onMouseClicked="#removeChosen" disable="true">
+                    <font>
+                        <Font name="Ebrima" size="10.0" />
                     </font>
                 </Button>
                 <HBox layoutX="20.0" layoutY="480.0" spacing="10.0">

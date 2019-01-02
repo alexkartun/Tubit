@@ -27,7 +27,9 @@ public class Song {
         this.album = album;
         this.url = url;
     }
-    
+    public int getSongId() {
+        return this.id;
+    }
     
     public String getUrl() {
         return this.url;

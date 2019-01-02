@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -16,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -33,24 +35,6 @@ import tubit.models.Song;
  * @author Ofir
  */
 public class MakePlaylistUIController extends TubitBaseController {
-
-    // inner class for simple fill to tables after query is executed in model.
-    /**private class DisplayedSong {
-
-        public SimpleStringProperty songName;
-        public SimpleStringProperty singerName;
-        public SimpleStringProperty albumName;
-        public SimpleIntegerProperty duration;
-        public SimpleIntegerProperty year;
-
-        public DisplayedSong(String songName, String singerName, String albumName, Integer duration, Integer year) {
-            this.songName = new SimpleStringProperty(songName);
-            this.singerName = new SimpleStringProperty(singerName);
-            this.albumName = new SimpleStringProperty(albumName);
-            this.duration = new SimpleIntegerProperty(duration);
-            this.year = new SimpleIntegerProperty(year);
-        }
-    }**/
     @FXML
     ScrollPane scroll_searchResults;
     @FXML
@@ -59,24 +43,38 @@ public class MakePlaylistUIController extends TubitBaseController {
     JFXTextField searchField;
     @FXML
     ToggleGroup songSearchingSubject;
+    @FXML
+    Button removeChosen;
 
     @FXML
-    public TableView<Song> queriedSongs;
+    public TableView<Song> queriedSongsTable;
     @FXML
-    public TableColumn<Song, String> songName;
+    public TableColumn<Song, String> q_songName;
     @FXML
-    public TableColumn<Song, String> singerName;
+    public TableColumn<Song, String> q_singerName;
     @FXML
-    public TableColumn<Song, String> albumName;
+    public TableColumn<Song, String> q_albumName;
     @FXML
-    public TableColumn<Song, Integer> duration;
+    public TableColumn<Song, Integer> q_duration;
     @FXML
-    public TableColumn<Song, Integer> year;
+    public TableColumn<Song, Integer> q_year;
+    
+    @FXML
+    public TableView<Song> playlistSongsTable;
+    @FXML
+    public TableColumn<Song, String> p_songName;
+    @FXML
+    public TableColumn<Song, String> p_singerName;
+    @FXML
+    public TableColumn<Song, String> p_albumName;
+    @FXML
+    public TableColumn<Song, Integer> p_duration;
+    @FXML
+    public TableColumn<Song, Integer> p_year;
 
     MakePlaylistModel model;
     List<Song> c_queriedSongs;
-    ObservableList<Song> c_displayed_queries;
-    List<Song> chosenSongs;
+    List<Song> c_chosenSongs;
 
     /**
      * Initializes the controller class.
@@ -84,15 +82,8 @@ public class MakePlaylistUIController extends TubitBaseController {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         model = new MakePlaylistModel();
-        chosenSongs = new ArrayList<>();
-
-        songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
-        singerName.setCellValueFactory(new PropertyValueFactory<>("SingerName"));
-        albumName.setCellValueFactory(new PropertyValueFactory<>("albumName"));
-        duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        year.setCellValueFactory(new PropertyValueFactory<>("year"));
-
-        //queriedSongs.setItems(c_displayed_queries);
+        c_chosenSongs = new ArrayList<>();
+        bindTablesColumns();
     }
 
     @FXML
@@ -102,22 +93,44 @@ public class MakePlaylistUIController extends TubitBaseController {
 
     @FXML
     private void addSongToPlaylist(MouseEvent event) throws IOException {
+        Song chosenSong = queriedSongsTable.getSelectionModel().getSelectedItem();
+        if (chosenSong == null) { // button is pressed without selecting a song. do nothing.
+            return;
+        }
+        c_chosenSongs.add(chosenSong);
+        c_queriedSongs.remove(chosenSong);
+        queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
+        playlistSongsTable.setItems(FXCollections.observableArrayList(c_chosenSongs));
     }
 
     @FXML
     private void extractSongs(MouseEvent event) throws IOException {
         c_queriedSongs = model.extractSongs(getSearchCriteria(), searchField.getText());
-        c_displayed_queries = FXCollections.observableArrayList(c_queriedSongs);
-        queriedSongs.getItems().setAll(c_displayed_queries);
+        removeAlreadyChosenSongs();
+        queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
     }
 
     @FXML
     private void uploadPhoto(MouseEvent event) throws IOException {
     }
-
+    
+    @FXML
+    private void removeChosen(MouseEvent event) throws IOException {
+        Song removedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        c_chosenSongs.remove(removedSong);
+        playlistSongsTable.setItems(FXCollections.observableArrayList(c_chosenSongs));
+        removeChosen.setDisable(true);
+    }
+    @FXML
+    private void enableRemoveButton(MouseEvent event) throws IOException {
+        Song chosenSong = playlistSongsTable.getSelectionModel().getSelectedItem();
+        if (chosenSong != null) {
+            removeChosen.setDisable(false);
+        }
+    }
+    
     @FXML
     private void uploadPlaylistToDB(MouseEvent event) throws IOException {
-
     }
 
     private SEARCH_CRITERIA getSearchCriteria() {
@@ -133,5 +146,32 @@ public class MakePlaylistUIController extends TubitBaseController {
         }
         // unreachable code.
         return null;
+    }
+    
+    private void bindTablesColumns() {
+        q_songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
+        q_singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
+        q_albumName.setCellValueFactory(new PropertyValueFactory<>("albumName"));
+        q_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        q_year.setCellValueFactory(new PropertyValueFactory<>("year"));
+        p_songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
+        p_singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
+        p_albumName.setCellValueFactory(new PropertyValueFactory<>("albumName"));
+        p_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        p_year.setCellValueFactory(new PropertyValueFactory<>("year"));
+    }
+    
+    private void removeAlreadyChosenSongs() {
+        List<Song> toBeRemoved = new ArrayList<>();
+        // iterate through queried list without modifing it on the same time.
+        for (Song s : c_queriedSongs) {
+            for (Song chosen : c_chosenSongs) {
+                if (s.getSongId() == chosen.getSongId()) {
+                    toBeRemoved.add(s);
+                    break;
+                }
+            }
+        }
+        c_queriedSongs.removeAll(toBeRemoved);
     }
 }
