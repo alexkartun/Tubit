@@ -24,14 +24,14 @@ import javax.imageio.ImageIO;
  */
 public class MakePlaylistModel {
     public enum SEARCH_CRITERIA {
-        SONG_NAME, SINGER_NANE, ALBUM_NAME;
+        SONG_NAME, SINGER_NAME, ALBUM_NAME, DEFAULT;
     }
     public MakePlaylistModel() {
         
     }
     
     public List<Song> extractSongs(SEARCH_CRITERIA c, String searchingText) {
-        return DBUtils.getInstance().getSongsByCriteria(getAttribute(c), searchingText);
+        return DBUtils.getInstance().getSongsByCriteria(c, searchingText);
         /*List<Song> testList = new ArrayList<>();
         testList.add(new Song(1,"Yeahh baby", 215, 2016, "DJ Kaled", "LEchkikon", null));
         testList.add(new Song(2,"One day in your mouth", 199, 2015, "dsads", "Yohanis", null));
@@ -40,19 +40,21 @@ public class MakePlaylistModel {
     }
     
     String getAttribute(SEARCH_CRITERIA c) {
-        String s = c.toString().toLowerCase();
-        String[] words = s.split("_");
-        for(int i=1; i<words.length; i++) {
-            // capitalized first letter.
-            words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1); 
+        switch (c) {
+            case SONG_NAME:
+                return "songs.name";
+            case SINGER_NAME:
+                return "singers.name";
+            case ALBUM_NAME:
+                return "albums.name";
+            default:
+                return "";
+                
         }
-        StringBuilder sb = new StringBuilder();
-        for(String w : words)   sb.append(w);
-        return sb.toString();
     }
     
-    public void uploadPlaylistToDB(String name, ByteArrayInputStream blob, List<Song> songs) {
-        DBUtils.getInstance().insertPlaylist(name, blob, songs);
+    public boolean uploadPlaylistToDB(String name, ByteArrayInputStream blob, List<Song> songs, int creatorId) {
+        return DBUtils.getInstance().insertPlaylist(name, blob, songs, creatorId);
     }
     
     public ByteArrayInputStream getBlob(Image img) {

@@ -5,8 +5,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.image.Image;
 import tubit.models.ClientData;
+import tubit.models.MakePlaylistModel;
 import tubit.models.Playlist;
 import tubit.models.PlaylistChooserModel.FILTER;
 import tubit.models.Song;
@@ -266,26 +269,21 @@ public class DBUtils {
         return genres;
     }
 
-    public List<Song> getSongsByCriteria(String criteria, String searchField) {
+    public List<Song> getSongsByCriteria(MakePlaylistModel.SEARCH_CRITERIA c, String searchField) {
         List<Song> selectedSongs = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "SELECT songs.*, singers.name AS singerName, albums.name AS albumName\n"
-                    + "FROM songs, singers, albums\n"
-                    + "WHERE songs.singerId=singers.id AND\n"
-                    + "songs.albumId=albums.id AND ?=\"?\"";
+
+            String sql = getSQLViaCriteria(c);
             statement = connection.prepareStatement(sql);
-            statement.setString(1, criteria);
-            statement.setString(2, searchField);
+            statement.setString(1, '%' + searchField + '%');
             ResultSet result = statement.executeQuery();
             // query excuted correctly
             while (result.next() == true) {
-                
-                Song retSong = new Song();
-                selectedSongs.add(retSong);
+                selectedSongs.add(getNextSong(result));
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error on creating connection or query execution...");
@@ -305,6 +303,46 @@ public class DBUtils {
                 }
             }
         }
+        return selectedSongs;
+    }
+
+    private String getSQLViaCriteria(MakePlaylistModel.SEARCH_CRITERIA c) {
+        switch (c) {
+            case SONG_NAME:
+                return "SELECT songs.*, singers.name AS singerName, albums.name AS albumName\n"
+                        + "FROM songs, singers, albums\n"
+                        + "WHERE songs.singerId=singers.id AND\n"
+                        + "songs.albumId=albums.id AND songs.name LIKE ?";
+            case SINGER_NAME:
+                return "SELECT songs.*, singers.name AS singerName, albums.name AS albumName\n"
+                        + "FROM songs, singers, albums\n"
+                        + "WHERE songs.singerId=singers.id AND\n"
+                        + "songs.albumId=albums.id AND singers.name LIKE ?";
+            case ALBUM_NAME:
+                return "SELECT songs.*, singers.name AS singerName, albums.name AS albumName\n"
+                        + "FROM songs, singers, albums\n"
+                        + "WHERE songs.singerId=singers.id AND\n"
+                        + "songs.albumId=albums.id AND albums.name LIKE ?";
+            default:
+                return "";
+        }
+    }
+
+    private Song getNextSong(ResultSet result) {
+        Song s = null;
+        try {
+            int id = result.getInt("id");
+            String name = result.getString("name");
+            int duration = result.getInt("duration");
+            int year = result.getInt("year_released");
+            String singer = result.getString("singerName");
+            String album = result.getString("albumName");
+            String url = result.getString("url");
+            s = new Song(id, name, duration, year, singer, album, url);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return s;
     }
 
     public synchronized List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {
@@ -401,31 +439,38 @@ public class DBUtils {
         return new Image(is);
     }
 
-    public void insertPlaylist(String name, ByteArrayInputStream blob, List<Song> songs) {
-        int newPlaylistId = insertPlaylistMetaData(name, blob);
-        insertPlaylistDetails(newPlaylistId, songs);
+    public boolean insertPlaylist(String name, ByteArrayInputStream blob, List<Song> songs, int creatorId) {
+        boolean res;
+        int newPlaylistId = insertPlaylistMetaData(name, blob, creatorId);
+        if (newPlaylistId == -1) {
+            return false;
+        }
+        res = insertPlaylistDetails(newPlaylistId, songs);
+        return res;
+
     }
 
-    private int insertPlaylistMetaData(String name, ByteArrayInputStream blob) {
+    private int insertPlaylistMetaData(String name, ByteArrayInputStream blob, int creatorId) {
         Connection connection = null;
         PreparedStatement statement = null;
         int newPlaylistID = -1;
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
-            String sql = "INSERT INTO playlists(name,popularity,image,is_admin_made) VALUES(?,?,?,?);";
+            String sql = "INSERT INTO playlists(name,popularity,image,is_admin_made,creatorId) VALUES(?,?,?,?,?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             statement.setInt(2, 0);
             statement.setBlob(3, blob);
             statement.setBoolean(4, false);
+            statement.setInt(5, creatorId);
             statement.executeUpdate();
             // now extract the incremented ID of the new inserted playlist.
-            sql = "SELECT LAST_INSERT_ID();";
+            sql = "SELECT id FROM playlists ORDER BY id DESC LIMIT 1";
             statement = connection.prepareStatement(sql);
             ResultSet res = statement.executeQuery();
             if (res.next() == true) {
-                newPlaylistID = res.getInt(0); // or 1 - first and only column.
+                newPlaylistID = res.getInt("id"); // or 1 - first and only column.
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error on creating connection or query execution..." + ex.getMessage());
@@ -448,14 +493,14 @@ public class DBUtils {
         return newPlaylistID;
     }
 
-    private void insertPlaylistDetails(int newPlaylistId, List<Song> songs) {
+    private boolean insertPlaylistDetails(int newPlaylistId, List<Song> songs) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
             for (Song s : songs) { // a record for each song in the playlist.
-                String sql = "INSERT INTO playlists_songs(playlistId, songId) VALUES(?,?);";
+                String sql = "INSERT INTO playlists_songs(playlistId, songId) VALUES(?,?)";
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, newPlaylistId);
                 statement.setInt(2, s.getSongId());
@@ -463,6 +508,7 @@ public class DBUtils {
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error on creating connection or query execution..." + ex.getMessage());
+            return false;
         } finally {
             if (statement != null) {
                 try {
@@ -479,6 +525,7 @@ public class DBUtils {
                 }
             }
         }
+        return true;
     }
 }
 //Image img = new Image(ImageIO.read(new ByteArrayInputStream(
