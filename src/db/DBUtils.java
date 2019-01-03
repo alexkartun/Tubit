@@ -17,7 +17,7 @@ public class DBUtils {
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String USER = "root";
-    private final String PASS = "alex1992";
+    private final String PASS = "204717664";
 
     /**
      *
@@ -267,7 +267,44 @@ public class DBUtils {
     }
 
     public List<Song> getSongsByCriteria(String criteria, String searchField) {
-        return null;
+        List<Song> selectedSongs = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            connection = DriverManager.getConnection(DB_URL, USER, PASS);
+            String sql = "SELECT songs.*, singers.name AS singerName, albums.name AS albumName\n"
+                    + "FROM songs, singers, albums\n"
+                    + "WHERE songs.singerId=singers.id AND\n"
+                    + "songs.albumId=albums.id AND ?=\"?\"";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, criteria);
+            statement.setString(2, searchField);
+            ResultSet result = statement.executeQuery();
+            // query excuted correctly
+            while (result.next() == true) {
+                
+                Song retSong = new Song();
+                selectedSongs.add(retSong);
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println("Error on creating connection or query execution...");
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error on closing statement...");
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error on closing connection...");
+                }
+            }
+        }
     }
 
     public synchronized List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {
