@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
  */
 public class PlaylistChooserModel {
     public enum FILTER {
-        POPULARITY, RECENT;
+        POPULARITY, RECENT, FAVORITE;
     }
     private List<Playlist> m_moodsPlaylists;
     private List<Playlist> m_popularPlayLists;

@@ -17,7 +17,7 @@ public class DBUtils {
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String USER = "root";
-    private final String PASS = "204717664";
+    private final String PASS = "alex1992";
 
     /**
      *
@@ -265,7 +265,7 @@ public class DBUtils {
         }
         return genres;
     }
-
+    
     public List<Song> getSongsByCriteria(String criteria, String searchField) {
         List<Song> selectedSongs = new ArrayList<>();
         Connection connection = null;
@@ -284,8 +284,8 @@ public class DBUtils {
             // query excuted correctly
             while (result.next() == true) {
                 
-                Song retSong = new Song();
-                selectedSongs.add(retSong);
+                //Song retSong = new Song();
+                //selectedSongs.add(retSong);
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error on creating connection or query execution...");
@@ -305,6 +305,7 @@ public class DBUtils {
                 }
             }
         }
+        return selectedSongs;
     }
 
     public synchronized List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {
