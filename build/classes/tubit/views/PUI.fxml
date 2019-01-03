@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import java.net.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" styleClass="parent" stylesheets="@../../resources/css/stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tubit.controllers.PUIController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="230.0" styleClass="sidebar">
+            <children>
+                <ImageView fitHeight="115.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../resources/logos/icon.png" />
+                    </image>
+                </ImageView>
+                <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="40.0" text="Tubit" textFill="WHITE">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                    <effect>
+                        <DropShadow />
+                    </effect>      
+                </Label>
+            </children>
+        </VBox>
+        <Pane fx:id="pane" layoutX="230.0" prefHeight="600.0" prefWidth="570.0" styleClass="white-sidebar">
+            <children>
+                <FontAwesomeIcon iconName="ARROW_LEFT" layoutX="15.0" layoutY="22.0" onMouseClicked="#backToPlaylistChooser" size="1.5em" stroke="WHITE" styleClass="backBtn" />
+                <FontAwesomeIcon iconName="CLOSE" layoutX="530.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
+                <Label layoutX="30.0" layoutY="39.0" text="Playlist name:" textFill="#545454">
+                    <font>
+                        <Font name="Ebrima Bold" size="25.0" />
+                    </font>
+                    <effect>
+                        <Glow />
+                    </effect>   
+                </Label>
+                <Label fx:id="playlistName" layoutX="204.0" layoutY="39.0" textFill="#545454">
+                    <font>
+                        <Font name="Ebrima Bold" size="25.0" />
+                    </font>
+                    <effect>
+                        <Glow />
+                    </effect>   
+                </Label>
+                <Label layoutX="30.0" layoutY="71.0" text="Creator:" textFill="#a3a3a3">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="playlistCreator" layoutX="92.0" layoutY="70.0" textFill="#a3a3a3">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                </Label>
+                <VBox layoutX="30.0" layoutY="98.0" prefHeight="215.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <TableView fx:id="songs" prefHeight="199.0" prefWidth="504.0" styleClass="table-view" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="songName" prefWidth="100.0" text="Song name" />
+                                <TableColumn fx:id="singerName" prefWidth="100.0" text="Singer" />
+                                <TableColumn fx:id="albumName" prefWidth="100.0" text="Album" />
+                                <TableColumn fx:id="duration" prefWidth="100.0" text="Duration" />
+                                <TableColumn fx:id="year" prefWidth="100.0" text="Year" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+                <FontAwesomeIcon iconName="YOUTUBE" layoutX="447.0" layoutY="72.0" onMouseClicked="#playSong" size="50" stroke="WHITE" styleClass="playBtn" />
+                <FontAwesomeIcon fx:id="rateBtn" fill="#ffd400" iconName="STAR" layoutX="508.0" layoutY="66.0" onMouseClicked="#ratePlaylist" opacity="0.3" size="25" stroke="WHITE" />
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

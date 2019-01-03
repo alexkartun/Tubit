@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.effect.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="rootPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" styleClass="parent" stylesheets="@../../resources/css/stylesheet.css" fx:controller="tubit.controllers.MakePlaylistUIController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="230.0" styleClass="sidebar">
+            <children>
+                <ImageView fitHeight="115.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../resources/logos/icon.png" />
+                    </image>
+                </ImageView>
+                <Label nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="40.0" text="Tubit" textFill="WHITE">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                    <effect>
+                        <DropShadow />
+                    </effect>      
+                </Label>
+            </children>
+        </VBox>
+        <Pane layoutX="230.0" layoutY="0.0" prefHeight="600.0" prefWidth="570.0" styleClass="white-sidebar">
+            <children>
+                <FontAwesomeIcon iconName="CLOSE" layoutX="530.0" layoutY="22.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
+                <FontAwesomeIcon iconName="ARROW_LEFT" layoutX="15.0" layoutY="22.0" onMouseClicked="#backToPlaylistChooser" size="1.5em" stroke="WHITE" styleClass="backBtn" />
+                <Label layoutX="15.0" layoutY="80" text="Playlist name:">
+                    <font>
+                        <Font name="Ebrima Bold" size="25.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="playlistName" layoutX="210.0" layoutY="85.0" prefWidth="250.0"  />
+                <VBox layoutX="10.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <TableView fx:id="queriedSongsTable" prefHeight="200.0" VBox.vgrow="ALWAYS" styleClass="table-view">
+                            <columns>
+                                <TableColumn fx:id="q_songName" text="Song name" prefWidth="62.0"/>
+                                <TableColumn fx:id="q_singerName" text="Singer" prefWidth="60.0"/>
+                                <TableColumn fx:id="q_albumName" text="Album" prefWidth="60.0"/>
+                                <TableColumn fx:id="q_duration" text="Duration" prefWidth="43.0"/>
+                                <TableColumn fx:id="q_year" text="Year" prefWidth="35.0"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+                <FontAwesomeIcon iconName="ARROW_CIRCLE_RIGHT" layoutX="272" layoutY="280" onMouseClicked="#addSongToPlaylist" size="2.5em" stroke="WHITE" styleClass="backBtn" />
+                <VBox layoutX="300.0" layoutY="140.0" prefHeight="300.0" prefWidth="260.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+                    <children>
+                        <TableView fx:id="playlistSongsTable" prefHeight="200.0" VBox.vgrow="ALWAYS" onMouseClicked="#enableRemoveButton" styleClass="table-view">
+                            <columns>
+                                <TableColumn fx:id="p_songName" text="Song name" prefWidth="62.0"/>
+                                <TableColumn fx:id="p_singerName" text="Singer" prefWidth="60.0"/>
+                                <TableColumn fx:id="p_albumName" text="Album" prefWidth="60.0"/>
+                                <TableColumn fx:id="p_duration" text="Duration" prefWidth="43.0"/>
+                                <TableColumn fx:id="p_year" text="Year" prefWidth="35.0"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                </VBox>
+                
+                <Label layoutX="20.0" layoutY="445.0" text="Search:">
+                    <font>
+                        <Font name="Ebrima Bold" size="15.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="searchField" layoutX="80.0" layoutY="440.0" prefWidth="200.0" />
+                <Button layoutX="300.0" layoutY="445.0" mnemonicParsing="false" text="Search!" onMouseClicked="#extractSongs">
+                    <font>
+                        <Font name="Ebrima" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="removeChosen" layoutX="510.0" layoutY="445.0" mnemonicParsing="false" text="Remove" onMouseClicked="#removeChosen" disable="true">
+                    <font>
+                        <Font name="Ebrima" size="10.0" />
+                    </font>
+                </Button>
+                <HBox layoutX="20.0" layoutY="480.0" spacing="10.0">
+                    <children>
+                        <fx:define>
+                            <ToggleGroup fx:id="songSearchingSubject"/>
+                        </fx:define>
+                        <RadioButton mnemonicParsing="false" selected="true" text="Song name" toggleGroup="$songSearchingSubject"/>
+                        <RadioButton mnemonicParsing="false" text="Singer name" toggleGroup="$songSearchingSubject" />
+                        <RadioButton mnemonicParsing="false" text="Album name" toggleGroup="$songSearchingSubject" />
+                    </children>
+                </HBox>
+                <Label layoutX="20.0" layoutY="520.0" text="Upload playlist icon:">
+                    <font>
+                        <Font name="Ebrima Bold" size="15.0" />
+                    </font>
+                </Label>
+                <Button layoutX="180.0" layoutY="515.0" mnemonicParsing="false" text="browse..." onMouseClicked="#uploadPhoto"/>
+                <ImageView fx:id="playlistPhoto" layoutX="250.0" layoutY="510.0" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" >
+                </ImageView>
+                <Button layoutX="380.0" layoutY="520.0" mnemonicParsing="false" text="Create!" onMouseClicked="#createPlaylist" styleClass="loginBtn">
+                    <font>
+                        <Font name="Ebrima Bold" size="20.0" />
+                    </font>
+                </Button>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
