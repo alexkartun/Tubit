@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 
 /**
@@ -48,15 +50,18 @@ public class MakePlaylistModel {
         for(String w : words)   sb.append(w);
         return sb.toString();
     }
-    /**
-    public ByteArrayInputStream getBias(String path) {
+    
+    public void uploadPlaylistToDB(String name, ByteArrayInputStream blob, List<Song> songs) {
+        DBUtils.getInstance().insertPlaylist(name, blob, songs);
+    }
+    
+    public ByteArrayInputStream getBlob(Image img) {
         ByteArrayOutputStream baos = null;
         try {
-            BufferedImage bi = ImageIO.read(new File(getClass().getResource(path).toURI()));
+            BufferedImage bi = SwingFXUtils.fromFXImage(img, null);
             baos = new ByteArrayOutputStream();
             ImageIO.write(bi, "png", baos);
         } catch (IOException ex) {
-        } catch (URISyntaxException ex) {
         } finally {
             try {
                 baos.close();
@@ -65,5 +70,4 @@ public class MakePlaylistModel {
         }
         return new ByteArrayInputStream(baos.toByteArray());
     }
-    **/
 }

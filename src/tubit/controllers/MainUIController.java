@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import tubit.models.ClientData;
 
 public class MainUIController extends TubitBaseController {
 
@@ -19,6 +20,8 @@ public class MainUIController extends TubitBaseController {
     private JFXTextField usernameInput;
     @FXML
     private JFXPasswordField passwordInput;
+    
+    static ClientData client;
 
     @FXML
     private void openRegistration(MouseEvent event) throws IOException {
@@ -30,8 +33,8 @@ public class MainUIController extends TubitBaseController {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         if (validateInputs(username, password)) {
-            if (DBUtils.getInstance().checkClientInDB(username, password)) {
-                //TODO: Game menu
+            client = DBUtils.getInstance().checkClientInDB(username, password);
+            if (client.status) {
                 System.out.println("Connected");
                 refreshPage("/tubit/views/PlaylistChooserUI.fxml");
             } else {

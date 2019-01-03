@@ -6,16 +6,16 @@
 package tubit.controllers;
 
 import com.jfoenix.controls.JFXTextField;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -24,7 +24,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import tubit.models.MakePlaylistModel;
 import tubit.models.MakePlaylistModel.SEARCH_CRITERIA;
 import tubit.models.Song;
@@ -42,9 +47,13 @@ public class MakePlaylistUIController extends TubitBaseController {
     @FXML
     JFXTextField searchField;
     @FXML
+    JFXTextField playlistName;
+    @FXML
     ToggleGroup songSearchingSubject;
     @FXML
     Button removeChosen;
+    @FXML
+    ImageView playlistPhoto;
 
     @FXML
     public TableView<Song> queriedSongsTable;
@@ -75,6 +84,7 @@ public class MakePlaylistUIController extends TubitBaseController {
     MakePlaylistModel model;
     List<Song> c_queriedSongs;
     List<Song> c_chosenSongs;
+    ByteArrayInputStream picBlob;
 
     /**
      * Initializes the controller class.
@@ -84,6 +94,7 @@ public class MakePlaylistUIController extends TubitBaseController {
         model = new MakePlaylistModel();
         c_chosenSongs = new ArrayList<>();
         bindTablesColumns();
+        playlistPhoto.setImage(new Image("file:\\\\\\" + "C:\\Users\\Ofir\\Documents\\NetBeansProjects\\Tubit\\src\\resources\\images\\question-mark.jpg"));
     }
 
     @FXML
@@ -112,6 +123,18 @@ public class MakePlaylistUIController extends TubitBaseController {
 
     @FXML
     private void uploadPhoto(MouseEvent event) throws IOException {
+        JFileChooser picChooser = new JFileChooser("C:\\Users\\Ofir\\Documents\\NetBeansProjects\\Tubit");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG photos only", "png");
+        picChooser.setFileFilter(filter);
+        picChooser.setApproveButtonText("Choose playlist photo");
+        int returnVal = picChooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            String imagePath = picChooser.getSelectedFile().getPath();
+            //Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null); // convert file to image
+            Image fixedSizeImage =  new Image("file:\\\\\\" + imagePath, 100.0, 100.0, false, false);
+            playlistPhoto.setImage(fixedSizeImage);
+            picBlob = model.getBlob(fixedSizeImage);
+        }
     }
     
     @FXML
@@ -130,7 +153,8 @@ public class MakePlaylistUIController extends TubitBaseController {
     }
     
     @FXML
-    private void uploadPlaylistToDB(MouseEvent event) throws IOException {
+    private void createPlaylist(MouseEvent event) throws IOException {
+        model.uploadPlaylistToDB(playlistName.getText(), picBlob, c_chosenSongs);
     }
 
     private SEARCH_CRITERIA getSearchCriteria() {
@@ -174,4 +198,6 @@ public class MakePlaylistUIController extends TubitBaseController {
         }
         c_queriedSongs.removeAll(toBeRemoved);
     }
+        
+
 }

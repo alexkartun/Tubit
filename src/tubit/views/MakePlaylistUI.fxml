@@ -103,12 +103,9 @@
                     </font>
                 </Label>
                 <Button layoutX="180.0" layoutY="515.0" mnemonicParsing="false" text="browse..." onMouseClicked="#uploadPhoto"/>
-                <ImageView layoutX="250.0" layoutY="510.0" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" >
-                    <image>
-                        <Image url="@../../resources/images/gym.png"/>
-                    </image>
+                <ImageView fx:id="playlistPhoto" layoutX="250.0" layoutY="510.0" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" >
                 </ImageView>
-                <Button layoutX="380.0" layoutY="520.0" mnemonicParsing="false" text="Create!" onMouseClicked="#uploadPlaylistToDB" styleClass="loginBtn">
+                <Button layoutX="380.0" layoutY="520.0" mnemonicParsing="false" text="Create!" onMouseClicked="#createPlaylist" styleClass="loginBtn">
                     <font>
                         <Font name="Ebrima Bold" size="20.0" />
                     </font>

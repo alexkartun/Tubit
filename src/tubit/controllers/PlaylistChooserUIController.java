@@ -16,6 +16,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import tubit.models.ClientData;
 import tubit.models.PlaylistChooserModel;
 import tubit.models.Playlist;
 import tubit.models.PlaylistChooserModel.FILTER;
@@ -27,6 +28,7 @@ import tubit.models.PlaylistChooserModel.FILTER;
  */
 public class PlaylistChooserUIController extends TubitBaseController {
     static Playlist chosenPlaylist;
+    static ClientData clientData;
     private final int NUM_OF_SHOWN_PLAYLISTS = 4;
     List<Playlist> c_moodsPlaylists;
     List<Playlist> c_userPopularity;
@@ -65,6 +67,7 @@ public class PlaylistChooserUIController extends TubitBaseController {
         c_userPopularity = model.getPopularPlaylists();
         c_userRecent = model.getRecentPlaylists();
         chosenPlaylist = null; // will be updated when user chooses playlist.
+        clientData = MainUIController.client;
         initPlaylistMap(admin_playlist_current, user_playlist_current, getUserFilter());
     }
 
@@ -172,7 +175,7 @@ public class PlaylistChooserUIController extends TubitBaseController {
     private void showPlaylist(MouseEvent event) throws IOException {
         ImageView clickedImage = (ImageView) event.getSource();
         chosenPlaylist = playlistLinker.get(clickedImage); // saves the chosen playlist for next window.
-        refreshPage("/tubit/views/PlayerUI.fxml");
+        refreshPage("/tubit/views/PUI.fxml");
     }
 
     @FXML

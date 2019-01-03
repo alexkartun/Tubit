@@ -52,10 +52,10 @@ public class PlaylistChooserModel {
         //return DBUtils.getInstance().getPlaylists(false, f); 
         //nt id, String name, Image icon, int p, List<Song> songs, boolean isAdminMade
         List<Playlist> list = new ArrayList<>();
-        list.add(new Playlist(1, "Lechkikon", new Image("resources/images/u1.jpg"), 15, null, false));
-        list.add(new Playlist(2, "Woolfi", new Image("resources/images/u2.jpg"), 20, null, false));
-        list.add(new Playlist(3, "Tzookikon", new Image("resources/images/u3.jpg"), 25, null, false));
-        list.add(new Playlist(4, "Yesss", new Image("resources/images/u4.jpg"), 30, null, false));
+        list.add(new Playlist(1, "alex", "Lechkikon", new Image("resources/images/u1.jpg"), 15, null, false));
+        list.add(new Playlist(2, "alex", "Woolfi", new Image("resources/images/u2.jpg"), 20, null, false));
+        list.add(new Playlist(3, "alex", "Tzookikon", new Image("resources/images/u3.jpg"), 25, null, false));
+        list.add(new Playlist(4, "alex", "Yesss", new Image("resources/images/u4.jpg"), 30, null, false));
         return list;
     }
 }

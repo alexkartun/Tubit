@@ -43,6 +43,13 @@
     -fx-fill: #6747CD;
 }
 
+.playBtn {
+    -fx-fill: #545454;
+}
+.playBtn:hover {
+    -fx-fill: #6747CD;
+}
+
 .table-view{
     -fx-background-color: transparent;
     -fx-border-color: #131313;

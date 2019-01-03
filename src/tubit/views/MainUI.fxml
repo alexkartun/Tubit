@@ -88,7 +88,6 @@
                         <Font name="Ebrima" size="14.0" />
                     </font>
                 </Label>
-                <JFXBadge layoutX="372.0" layoutY="1.0" />
                 <FontAwesomeIcon iconName="CLOSE" layoutX="380.0" layoutY="18.0" onMouseClicked="#closeApp" size="1.5em" stroke="WHITE" styleClass="closeBtn" />
             </children>
         </Pane>
