@@ -6,16 +6,13 @@
 package tubit.controllers;
 
 import com.jfoenix.controls.JFXTextField;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -27,8 +24,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import tubit.models.MakePlaylistModel;
 import tubit.models.MakePlaylistModel.SEARCH_CRITERIA;
@@ -40,6 +37,7 @@ import tubit.models.Song;
  * @author Ofir
  */
 public class MakePlaylistUIController extends TubitBaseController {
+
     @FXML
     ScrollPane scroll_searchResults;
     @FXML
@@ -67,7 +65,7 @@ public class MakePlaylistUIController extends TubitBaseController {
     public TableColumn<Song, Integer> q_duration;
     @FXML
     public TableColumn<Song, Integer> q_year;
-    
+
     @FXML
     public TableView<Song> playlistSongsTable;
     @FXML
@@ -94,7 +92,9 @@ public class MakePlaylistUIController extends TubitBaseController {
         model = new MakePlaylistModel();
         c_chosenSongs = new ArrayList<>();
         bindTablesColumns();
-        playlistPhoto.setImage(new Image("file:\\\\\\" + "C:\\Users\\Ofir\\Documents\\NetBeansProjects\\Tubit\\src\\resources\\images\\question-mark.jpg"));
+        Image defaultImage = new Image("/resources/images/question-mark.jpg");
+        playlistPhoto.setImage(defaultImage);
+        picBlob = model.getBlob(defaultImage);
     }
 
     @FXML
@@ -116,9 +116,22 @@ public class MakePlaylistUIController extends TubitBaseController {
 
     @FXML
     private void extractSongs(MouseEvent event) throws IOException {
-        c_queriedSongs = model.extractSongs(getSearchCriteria(), searchField.getText());
+        c_queriedSongs = model.extractSongs(getSearchCriteria(), capitalize(searchField.getText()));
         removeAlreadyChosenSongs();
         queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
+    }
+
+    public static String capitalize(String str) {
+        String words[] = str.replaceAll("\\s+", " ").trim().split(" ");
+        String newSentence = "";
+        for (String word : words) {
+            for (int i = 0; i < word.length(); i++) {
+                newSentence = newSentence + ((i == 0) ? word.substring(i, i + 1).toUpperCase()
+                        : (i != word.length() - 1) ? word.substring(i, i + 1).toLowerCase() : word.substring(i, i + 1).toLowerCase().toLowerCase() + " ");
+            }
+        }
+
+        return newSentence.substring(0, newSentence.length()-1);
     }
 
     @FXML
@@ -131,12 +144,12 @@ public class MakePlaylistUIController extends TubitBaseController {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String imagePath = picChooser.getSelectedFile().getPath();
             //Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null); // convert file to image
-            Image fixedSizeImage =  new Image("file:\\\\\\" + imagePath, 100.0, 100.0, false, false);
+            Image fixedSizeImage = new Image("file:\\\\\\" + imagePath, 100.0, 100.0, false, false);
             playlistPhoto.setImage(fixedSizeImage);
             picBlob = model.getBlob(fixedSizeImage);
         }
     }
-    
+
     @FXML
     private void removeChosen(MouseEvent event) throws IOException {
         Song removedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
@@ -144,6 +157,7 @@ public class MakePlaylistUIController extends TubitBaseController {
         playlistSongsTable.setItems(FXCollections.observableArrayList(c_chosenSongs));
         removeChosen.setDisable(true);
     }
+
     @FXML
     private void enableRemoveButton(MouseEvent event) throws IOException {
         Song chosenSong = playlistSongsTable.getSelectionModel().getSelectedItem();
@@ -151,10 +165,19 @@ public class MakePlaylistUIController extends TubitBaseController {
             removeChosen.setDisable(false);
         }
     }
-    
+
     @FXML
     private void createPlaylist(MouseEvent event) throws IOException {
-        model.uploadPlaylistToDB(playlistName.getText(), picBlob, c_chosenSongs);
+        String name = playlistName.getText();
+        int creatorId = PlaylistChooserUIController.clientData.id;
+        boolean res = model.uploadPlaylistToDB(name, picBlob, c_chosenSongs, creatorId);
+        String message;
+        if (res == true) {
+            message = "'" + playlistName + "' playlist has been saved!";
+        } else {
+            message = "Error occured! playlist has not been saved";
+        }
+        JOptionPane.showMessageDialog(null , message);
     }
 
     private SEARCH_CRITERIA getSearchCriteria() {
@@ -164,14 +187,14 @@ public class MakePlaylistUIController extends TubitBaseController {
             case "Song name":
                 return SEARCH_CRITERIA.SONG_NAME;
             case "Singer name":
-                return SEARCH_CRITERIA.SINGER_NANE;
+                return SEARCH_CRITERIA.SINGER_NAME;
             case "Album name":
                 return SEARCH_CRITERIA.ALBUM_NAME;
         }
         // unreachable code.
         return null;
     }
-    
+
     private void bindTablesColumns() {
         q_songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
         q_singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
@@ -184,7 +207,7 @@ public class MakePlaylistUIController extends TubitBaseController {
         p_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         p_year.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
-    
+
     private void removeAlreadyChosenSongs() {
         List<Song> toBeRemoved = new ArrayList<>();
         // iterate through queried list without modifing it on the same time.
@@ -198,6 +221,5 @@ public class MakePlaylistUIController extends TubitBaseController {
         }
         c_queriedSongs.removeAll(toBeRemoved);
     }
-        
 
 }

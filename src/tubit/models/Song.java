@@ -35,15 +35,15 @@ public class Song {
         return this.url;
     }
     
-    public String getName() {
+    public String getSongName() {
         return name;
     }
     
-    public String getSinger() {
+    public String getSingerName() {
         return singer;
     }
     
-    public String getAlbum() {
+    public String getAlbumName() {
         return album;
     }
     
