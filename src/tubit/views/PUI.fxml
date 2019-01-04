@@ -66,9 +66,9 @@
                 </Label>
                 <VBox layoutX="30.0" layoutY="98.0" prefHeight="215.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
                     <children>
-                        <TableView fx:id="songs" prefHeight="199.0" prefWidth="504.0" styleClass="table-view" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="songs" prefHeight="199.0" prefWidth="504.0" styleClass="table-view" VBox.vgrow="ALWAYS" onMouseClicked="#playSongFirstOption">
                             <columns>
-                                <TableColumn fx:id="songName" prefWidth="100.0" text="Song name" />
+                                <TableColumn fx:id="songName" prefWidth="100.0" text="Song name"/>
                                 <TableColumn fx:id="singerName" prefWidth="100.0" text="Singer" />
                                 <TableColumn fx:id="albumName" prefWidth="100.0" text="Album" />
                                 <TableColumn fx:id="duration" prefWidth="100.0" text="Duration" />
@@ -77,8 +77,18 @@
                         </TableView>
                     </children>
                 </VBox>
-                <FontAwesomeIcon iconName="YOUTUBE" layoutX="447.0" layoutY="72.0" onMouseClicked="#playSong" size="50" stroke="WHITE" styleClass="playBtn" />
-                <FontAwesomeIcon fx:id="rateBtn" fill="#ffd400" iconName="STAR" layoutX="508.0" layoutY="66.0" onMouseClicked="#ratePlaylist" opacity="0.3" size="25" stroke="WHITE" />
+                <FontAwesomeIcon iconName="PLAY" layoutX="394.0" layoutY="75.0" onMouseClicked="#playSongSecondOption" size="50" stroke="WHITE" styleClass="playBtn" />
+                <FontAwesomeIcon fx:id="rateBtn" fill="#ffd400" iconName="STAR" layoutX="506.0" layoutY="67.0" onMouseClicked="#ratePlaylist" opacity="0.3" size="25" stroke="WHITE" />
+            <Label layoutX="357.0" layoutY="50.0" text="Play" textFill="#a3a3a3">
+               <font>
+                  <Font name="Ebrima Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="rateLbl" layoutX="466.0" layoutY="50.0" text="Rate" textFill="#a3a3a3">
+               <font>
+                  <Font name="Ebrima Bold" size="14.0" />
+               </font>
+            </Label>
             </children>
         </Pane>
     </children>

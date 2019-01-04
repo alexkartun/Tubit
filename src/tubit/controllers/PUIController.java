@@ -28,9 +28,11 @@ import tubit.models.Song;
  * @author Kartun
  */
 public class PUIController extends TubitBaseController {
-    
+
     @FXML
     private Pane pane;
+    @FXML
+    private Label rateLbl;
     @FXML
     private Label playlistName;
     @FXML
@@ -56,10 +58,11 @@ public class PUIController extends TubitBaseController {
         makeStageDraggable();
         init();
     }
-    
+
     private void init() {
-        if (!PlaylistChooserUIController.chosenPlaylist.getIsAdmin()) {
-            rateBtn.setVisible(true);
+        if (PlaylistChooserUIController.chosenPlaylist.getIsAdmin()) {
+            rateLbl.setVisible(false);
+            rateBtn.setVisible(false);
         } else {
             if (PlaylistChooserUIController.clientData.checkForFavoritePlaylist(PlaylistChooserUIController.chosenPlaylist)) {
                 rateBtn.setOpacity(1.0);
@@ -70,27 +73,25 @@ public class PUIController extends TubitBaseController {
         bindTablesColumns();
         fillPlaylistTable();
     }
-    
+
     private void bindTablesColumns() {
-        songName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        singerName.setCellValueFactory(new PropertyValueFactory<>("singer"));
-        albumName.setCellValueFactory(new PropertyValueFactory<>("album"));
+        songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
+        singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
+        albumName.setCellValueFactory(new PropertyValueFactory<>("albumName"));
         duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         year.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
-    
+
     private void fillPlaylistTable() {
         songs.setItems(FXCollections.observableArrayList(PlaylistChooserUIController.chosenPlaylist.getSongsList()));
     }
-    
+
     @FXML
     private void backToPlaylistChooser(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
-
-    @FXML
-    private void playSong(MouseEvent event) {
-        Song chosenSong = songs.getSelectionModel().getSelectedItem();
+    
+    private void playSong(Song chosenSong) {
         if (chosenSong != null) {
             if (youtubeWebView == null) {
                 youtubeWebView = new WebView();
@@ -99,12 +100,25 @@ public class PUIController extends TubitBaseController {
                 youtubeWebView.setPrefHeight(261);
                 youtubeWebView.setPrefWidth(504);
                 pane.getChildren().addAll(youtubeWebView);
-            }      
+            }
             youtubeWebView.getEngine().load(chosenSong.getUrl());
         }
     }
     
+    @FXML
+    private void playSongFirstOption(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            Song chosenSong = songs.getSelectionModel().getSelectedItem();
+            playSong(chosenSong);
+        }
+    }
     
+    @FXML
+    private void playSongSecondOption(MouseEvent event) {
+        Song chosenSong = songs.getSelectionModel().getSelectedItem();
+        playSong(chosenSong);
+    }
+
     @FXML
     private void ratePlaylist(MouseEvent event) {
         double opacity = 1.0;

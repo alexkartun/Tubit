@@ -268,13 +268,9 @@ public class DBUtils {
         }
         return genres;
     }
-<<<<<<< HEAD
     
-    public List<Song> getSongsByCriteria(String criteria, String searchField) {
-=======
 
     public List<Song> getSongsByCriteria(MakePlaylistModel.SEARCH_CRITERIA c, String searchField) {
->>>>>>> f5c306584bbb3ee347cccb20fa9c05f94bbe5578
         List<Song> selectedSongs = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
@@ -288,13 +284,7 @@ public class DBUtils {
             ResultSet result = statement.executeQuery();
             // query excuted correctly
             while (result.next() == true) {
-<<<<<<< HEAD
-                
-                //Song retSong = new Song();
-                //selectedSongs.add(retSong);
-=======
                 selectedSongs.add(getNextSong(result));
->>>>>>> f5c306584bbb3ee347cccb20fa9c05f94bbe5578
             }
         } catch (SQLException | ClassNotFoundException ex) {
             System.out.println("Error on creating connection or query execution...");
@@ -315,8 +305,6 @@ public class DBUtils {
             }
         }
         return selectedSongs;
-<<<<<<< HEAD
-=======
     }
 
     private String getSQLViaCriteria(MakePlaylistModel.SEARCH_CRITERIA c) {
@@ -356,7 +344,6 @@ public class DBUtils {
             Logger.getLogger(DBUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return s;
->>>>>>> f5c306584bbb3ee347cccb20fa9c05f94bbe5578
     }
 
     public synchronized List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {
@@ -367,23 +354,31 @@ public class DBUtils {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL, USER, PASS);
             String playListsSql = null;
-            if (isAdmin) {
-                playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
-                        + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
-                        + "WHERE is_admin_made = ?";
-            } else if (f == FILTER.POPULARITY) {
-                playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
-                        + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
-                        + "WHERE is_admin_made = ? AND playlists.popularity > (SELECT AVG(playlists.popularity)\n"
-                        + "FROM playlists)";
-            } else if (f == FILTER.RECENT) {
-                playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
-                        + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
-                        + "WHERE is_admin_made = ? AND playlists.id > (SELECT AVG(playlists.id)\n"
-                        + "FROM playlists)";
+            if (null != f) switch (f) {
+                case ADMIN:
+                    playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
+                            + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
+                            + "WHERE is_admin_made = ?";
+                    break;
+                case POPULARITY:
+                    playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
+                            + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
+                            + "WHERE is_admin_made = ? AND playlists.popularity >= (SELECT AVG(playlists.popularity)\n"
+                            + "FROM playlists WHERE is_admin_made = ?)";
+                    break;
+                case RECENT:
+                    playListsSql = "SELECT clients.username, playlists.id, playlists.name, playlists.popularity, playlists.is_admin_made, playlists.image\n"
+                            + "FROM playlists INNER JOIN clients ON clients.id = playlists.creatorId\n"
+                            + "WHERE is_admin_made = ? AND playlists.id >= (SELECT AVG(playlists.id)\n"
+                            + "FROM playlists WHERE is_admin_made = ?)";
+                    break;
+                default:
+                    break;
             }
             statement = connection.prepareStatement(playListsSql);
             statement.setBoolean(1, isAdmin);
+            if (!isAdmin)
+                statement.setBoolean(2, isAdmin);
             ResultSet playListResult = statement.executeQuery();
             while (playListResult.next() == true) {
                 List<Song> songs = createPlaylistSongs(playListResult, connection, statement);

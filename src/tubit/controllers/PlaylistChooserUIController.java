@@ -7,17 +7,17 @@ package tubit.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import tubit.models.ClientData;
 import tubit.models.PlaylistChooserModel;
 import tubit.models.Playlist;
@@ -29,104 +29,87 @@ import tubit.models.PlaylistChooserModel.FILTER;
  * @author Ofir
  */
 public class PlaylistChooserUIController extends TubitBaseController {
+
     static Playlist chosenPlaylist;
     static ClientData clientData;
     private final int NUM_OF_SHOWN_PLAYLISTS = 4;
-    List<Playlist> c_moodsPlaylists;
-    List<Playlist> c_userPopularity;
-    List<Playlist> c_userRecent;
-    List<Playlist> c_userFavorites;
+    final List<Playlist> c_moodsPlaylists;
+    final List<Playlist> c_userPopularity;
+    final List<Playlist> c_userRecent;
+    final List<Playlist> c_userFavorites;
     int admin_playlist_current;
     int user_playlist_current;
-    Map<ImageView, Playlist> playlistLinker;
     PlaylistChooserModel model;
     @FXML
-    ImageView admin_pl1;
+    HBox adminPlaylists;
     @FXML
-    ImageView admin_pl2;
-    @FXML
-    ImageView admin_pl3;
-    @FXML
-    ImageView admin_pl4;
-    @FXML
-    ImageView user_pl1;
-    @FXML
-    ImageView user_pl2;
-    @FXML
-    ImageView user_pl3;
-    @FXML
-    ImageView user_pl4;
+    HBox userPlaylists;
     @FXML
     ToggleGroup userPlaylistFilter;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        makeStageDraggable();
+    public PlaylistChooserUIController() {
         clientData = MainUIController.client;
         model = new PlaylistChooserModel();
-        playlistLinker = new HashMap<>();
-        admin_playlist_current = 0;
-        user_playlist_current = 0;
         c_moodsPlaylists = model.getMoodPlaylists();
         c_userPopularity = model.getPopularPlaylists();
         c_userRecent = model.getRecentPlaylists();
         c_userFavorites = clientData.favoritePlaylists;
-        chosenPlaylist = null; // will be updated when user chooses playlist.
-        initPlaylistMap(admin_playlist_current, user_playlist_current, getUserFilter());
+        admin_playlist_current = 0;
+        user_playlist_current = 0;
     }
 
-    private void initPlaylistMap(int admin_startIdx, int user_startIndex, FILTER f) {
-        playlistLinker.clear();
-        playlistLinker.put(admin_pl1, c_moodsPlaylists.get(admin_startIdx));
-        playlistLinker.put(admin_pl2, c_moodsPlaylists.get(admin_startIdx + 1));
-        playlistLinker.put(admin_pl3, c_moodsPlaylists.get(admin_startIdx + 2));
-        playlistLinker.put(admin_pl4, c_moodsPlaylists.get(admin_startIdx + 3));
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        makeStageDraggable();
+        init(FILTER.ADMIN);
+        init(getFilter());
+    }
+
+    private void init(FILTER f) {
         switch (f) {
+            case ADMIN:
+                generateImageViews(adminPlaylists, c_moodsPlaylists, admin_playlist_current);
+                break;
             case POPULARITY:
-                playlistLinker.put(user_pl1, c_userPopularity.get(user_startIndex));
-                playlistLinker.put(user_pl2, c_userPopularity.get(user_startIndex + 1));
-                playlistLinker.put(user_pl3, c_userPopularity.get(user_startIndex + 2));
-                playlistLinker.put(user_pl4, c_userPopularity.get(user_startIndex + 3));
+                generateImageViews(userPlaylists, c_userPopularity, user_playlist_current);
                 break;
             case RECENT:
-                playlistLinker.put(user_pl1, c_userRecent.get(user_startIndex));
-                playlistLinker.put(user_pl2, c_userRecent.get(user_startIndex + 1));
-                playlistLinker.put(user_pl3, c_userRecent.get(user_startIndex + 2));
-                playlistLinker.put(user_pl4, c_userRecent.get(user_startIndex + 3));
+                generateImageViews(userPlaylists, c_userRecent, user_playlist_current); 
                 break;
             case FAVORITE:
-                List<ImageView> userViews = new ArrayList<>();
-                userViews.add(user_pl1);
-                userViews.add(user_pl2);
-                userViews.add(user_pl3);
-                userViews.add(user_pl4);
-                int index = 0;
-                for (; user_startIndex < c_userFavorites.size(); user_startIndex++) {
-                    Playlist playlist = c_userFavorites.get(user_startIndex);
-                    playlistLinker.put(userViews.get(user_startIndex), playlist);
-                    userViews.get(index++).setImage(playlist.getImage());
-                }
-                for (; user_startIndex < NUM_OF_SHOWN_PLAYLISTS; user_startIndex++) {
-                    
-                    userViews.get(index++).setImage(new Image("/resources/images/question-mark.jpg"));
-                }
-                return;
+                generateImageViews(userPlaylists, c_userFavorites, user_playlist_current);
+                break;
+
         }
-        setPlaylistsImages();
-    }
-    
-    private void setPlaylistsImages() {
-        admin_pl1.setImage(playlistLinker.get(admin_pl1).getImage());
-        admin_pl2.setImage(playlistLinker.get(admin_pl2).getImage());
-        admin_pl3.setImage(playlistLinker.get(admin_pl3).getImage());
-        admin_pl4.setImage(playlistLinker.get(admin_pl4).getImage());
-        user_pl1.setImage(playlistLinker.get(user_pl1).getImage());
-        user_pl2.setImage(playlistLinker.get(user_pl2).getImage());
-        user_pl3.setImage(playlistLinker.get(user_pl3).getImage());
-        user_pl4.setImage(playlistLinker.get(user_pl4).getImage());
     }
 
-    private FILTER getUserFilter() {
+    private void generateImageViews(HBox playlistsHbox, List<Playlist> playlists, int offset) {
+        playlistsHbox.getChildren().clear();
+        for (int i = offset; i < playlists.size(); i++) {
+            if (playlistsHbox.getChildren().size() == NUM_OF_SHOWN_PLAYLISTS) {
+                break;
+            }
+            final Playlist playlist = playlists.get(i);
+            playlistsHbox.getChildren().add(createImageView(playlist));
+        }
+    }
+
+    private ImageView createImageView(Playlist p) {
+        ImageView view = new ImageView(p.getImage());
+        view.setFitWidth(80.0);
+        view.setFitHeight(80.0);
+        view.setOnMouseClicked((event) -> {
+            try {
+                chosenPlaylist = p;
+                refreshPage("/tubit/views/PUI.fxml");
+            } catch (IOException ex) {
+                Logger.getLogger(PlaylistChooserUIController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        return view;
+    }
+
+    private FILTER getFilter() {
         RadioButton selectedRadioButton = (RadioButton) userPlaylistFilter.getSelectedToggle();
         String filter = selectedRadioButton.getText();
         switch (filter) {
@@ -136,15 +119,16 @@ public class PlaylistChooserUIController extends TubitBaseController {
                 return FILTER.RECENT;
             case "Favorite":
                 return FILTER.FAVORITE;
+            default:
+                return FILTER.ADMIN;
         }
-        // unreachable code.
-        return null;
     }
-    
-    
+
     @FXML
     private void changeFilter(MouseEvent event) throws IOException {
-        initPlaylistMap(admin_playlist_current, user_playlist_current, getUserFilter());
+        // back current position user playlists to start
+        user_playlist_current = 0;
+        init(getFilter());
     }
 
     @FXML
@@ -155,53 +139,48 @@ public class PlaylistChooserUIController extends TubitBaseController {
     @FXML
     private void admin_backwardList(MouseEvent event) throws IOException {
         if (admin_playlist_current > 0) {
-            initPlaylistMap(--admin_playlist_current, user_playlist_current, getUserFilter());
+            admin_playlist_current--;
+            init(FILTER.ADMIN);
         }
     }
 
     @FXML
     private void admin_forwardList(MouseEvent event) throws IOException {
         if (admin_playlist_current + NUM_OF_SHOWN_PLAYLISTS < c_moodsPlaylists.size()) {
-            initPlaylistMap(++admin_playlist_current, user_playlist_current, getUserFilter());
+            admin_playlist_current++;
+            init(FILTER.ADMIN);
+            //initPlaylistMap(++admin_playlist_current, user_playlist_current, getUserFilter());
         }
     }
 
-    
     @FXML
     private void user_backwardList(MouseEvent event) throws IOException {
         if (user_playlist_current > 0) {
-            initPlaylistMap(admin_playlist_current, --user_playlist_current, getUserFilter());
+            user_playlist_current--;
+            init(getFilter());
         }
     }
 
     @FXML
     private void user_forwardList(MouseEvent event) throws IOException {
-        switch (getUserFilter()) {
-            case POPULARITY:
-                if (user_playlist_current + NUM_OF_SHOWN_PLAYLISTS < c_userPopularity.size()) {
-                    initPlaylistMap(admin_playlist_current, ++user_playlist_current, getUserFilter());
-                }
-                break;
-            case RECENT:
-                if (user_playlist_current + NUM_OF_SHOWN_PLAYLISTS < c_userRecent.size()) {
-                    initPlaylistMap(admin_playlist_current, ++user_playlist_current, getUserFilter());
-                }
-                break;
-            case FAVORITE:
-                if (user_playlist_current + NUM_OF_SHOWN_PLAYLISTS < c_userFavorites.size()) {
-                    initPlaylistMap(admin_playlist_current, ++user_playlist_current, getUserFilter());
-                }
-                break;
+        int userPlaylistSize = getPlaylistSize();
+        if (user_playlist_current + NUM_OF_SHOWN_PLAYLISTS < userPlaylistSize) {
+            user_playlist_current--;
+            init(getFilter());
         }
     }
-
-    @FXML
-    private void showPlaylist(MouseEvent event) throws IOException {
-        ImageView clickedImage = (ImageView) event.getSource();
-        if (playlistLinker.containsKey(clickedImage)) {
-            chosenPlaylist = playlistLinker.get(clickedImage); // saves the chosen playlist for next window.
-            refreshPage("/tubit/views/PUI.fxml");
+    
+    private int getPlaylistSize() {
+        FILTER f = getFilter();
+        switch (f) {
+            case POPULARITY:
+                return c_userPopularity.size();
+            case RECENT:
+                return c_userRecent.size();
+            case FAVORITE:
+                return c_userFavorites.size();
         }
+        return -1;
     }
 
     @FXML

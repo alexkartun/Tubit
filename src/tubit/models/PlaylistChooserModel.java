@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
  */
 public class PlaylistChooserModel {
     public enum FILTER {
-        POPULARITY, RECENT, FAVORITE;
+        ADMIN, POPULARITY, RECENT, FAVORITE;
     }
     private List<Playlist> m_moodsPlaylists;
     private List<Playlist> m_popularPlayLists;
@@ -26,9 +26,9 @@ public class PlaylistChooserModel {
     
     
     public PlaylistChooserModel() {
-        m_moodsPlaylists = extractAdminPlaylist();
-        m_popularPlayLists = extractPlaylist(FILTER.POPULARITY);
-        m_recentPlaylists = extractPlaylist(FILTER.RECENT);
+        m_moodsPlaylists = extractPlaylist(true, FILTER.ADMIN);
+        m_popularPlayLists = extractPlaylist(false, FILTER.POPULARITY);
+        m_recentPlaylists = extractPlaylist(false, FILTER.RECENT);
     }
     
     public List<Playlist> getMoodPlaylists() {
@@ -43,19 +43,8 @@ public class PlaylistChooserModel {
         return m_recentPlaylists;
     }
     
-    private List<Playlist> extractAdminPlaylist() {
-        return DBUtils.getInstance().getPlaylists(true, null);
-    }
     
-    
-    private List<Playlist> extractPlaylist(FILTER f) {
-        //return DBUtils.getInstance().getPlaylists(false, f); 
-        //nt id, String name, Image icon, int p, List<Song> songs, boolean isAdminMade
-        List<Playlist> list = new ArrayList<>();
-        list.add(new Playlist(1, "alex", "Lechkikon", new Image("resources/images/u1.jpg"), 15, null, false));
-        list.add(new Playlist(2, "alex", "Woolfi", new Image("resources/images/u2.jpg"), 20, null, false));
-        list.add(new Playlist(3, "alex", "Tzookikon", new Image("resources/images/u3.jpg"), 25, null, false));
-        list.add(new Playlist(4, "alex", "Yesss", new Image("resources/images/u4.jpg"), 30, null, false));
-        return list;
+    private List<Playlist> extractPlaylist(boolean isAdmin, FILTER f) {
+        return DBUtils.getInstance().getPlaylists(isAdmin, f); 
     }
 }

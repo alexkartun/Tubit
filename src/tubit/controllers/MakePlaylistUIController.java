@@ -173,7 +173,7 @@ public class MakePlaylistUIController extends TubitBaseController {
         boolean res = model.uploadPlaylistToDB(name, picBlob, c_chosenSongs, creatorId);
         String message;
         if (res == true) {
-            message = "'" + playlistName + "' playlist has been saved!";
+            message = "'" + name + "' playlist has been saved!";
         } else {
             message = "Error occured! playlist has not been saved";
         }
