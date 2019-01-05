@@ -131,7 +131,7 @@ public class MakePlaylistUIController extends TubitBaseController {
             }
         }
 
-        return newSentence.substring(0, newSentence.length()-1);
+        return newSentence.substring(0, newSentence.length() - 1);
     }
 
     @FXML
@@ -168,16 +168,20 @@ public class MakePlaylistUIController extends TubitBaseController {
 
     @FXML
     private void createPlaylist(MouseEvent event) throws IOException {
-        String name = playlistName.getText();
         int creatorId = PlaylistChooserUIController.clientData.id;
-        boolean res = model.uploadPlaylistToDB(name, picBlob, c_chosenSongs, creatorId);
+        String name = playlistName.getText();
         String message;
-        if (res == true) {
-            message = "'" + name + "' playlist has been saved!";
+        if ("".equals(name) || c_chosenSongs.isEmpty()) {
+            message = "Error occured! please set playlist name and choose songs to it";
         } else {
-            message = "Error occured! playlist has not been saved";
+            boolean res = model.uploadPlaylistToDB(name, picBlob, c_chosenSongs, creatorId);
+            if (res == true) {
+                message = "'" + name + "' playlist has been saved!";
+            } else {
+                message = "Error occured! playlist has not been saved";
+            }
         }
-        JOptionPane.showMessageDialog(null , message);
+        JOptionPane.showMessageDialog(null, message);
     }
 
     private SEARCH_CRITERIA getSearchCriteria() {
