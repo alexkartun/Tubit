@@ -8,7 +8,6 @@ package db;
 /**
  * DB configuration class.
  * stores properties to connect to mySQL database.
- * implements Serializable for storing and reading from .ser file as an object.
  */
 public class DBConfig {
     private String dbUrl;
