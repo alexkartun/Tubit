@@ -26,13 +26,16 @@ import tubit.models.Song;
  * 
  */
 public class DBUtils {
-
+    // singleton
     private static DBUtils instance;
+    // path for DB configurations file.
     private final String DBCONFIG_PATH = "config.ser";
+    // default properties for config.
     private final String DEFAULT_JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DEFAULT_DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String DEFAULT_USER = "root";
     private final String DEFAULT_PASS = "204717664";
+    
     private DBConfig config;
     /**
      * Singleton function for the DBUtils member 'instance'.
@@ -55,11 +58,18 @@ public class DBUtils {
         }
     }
     
+    /**
+     * checks if DB configuration file is already stores.
+     * @return true if exists.
+     */
     private boolean isConfigExists() {
         File f = new File(DBCONFIG_PATH);
         return f.exists();
     }
     
+    /**
+     * reads DB configuration file and sets "config" member. 
+     */
     private void readConfig() {
         FileInputStream fis = null;
         ObjectInput in = null;
@@ -73,6 +83,9 @@ public class DBUtils {
         }
     }
     
+    /**
+     * saves default configuration in a file as a serializable.
+     */
     private void storeDefaultConfig() {
         FileOutputStream fos = null;
         ObjectOutputStream out = null;
