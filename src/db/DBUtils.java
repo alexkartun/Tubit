@@ -13,7 +13,12 @@ import tubit.models.MakePlaylistModel;
 import tubit.models.Playlist;
 import tubit.models.PlaylistChooserModel.FILTER;
 import tubit.models.Song;
-
+/**
+ * DBUtils class
+ * 
+ * This class handle the database.
+ * 
+ */
 public class DBUtils {
 
     private static DBUtils instance;
@@ -23,8 +28,9 @@ public class DBUtils {
     private final String PASS = "alex1992";
 
     /**
-     *
-     * @return
+     * Singlton function for the DBUtils member 'instance'.
+     * 
+     * @return instance - (DBUtils) 
      */
     public static DBUtils getInstance() {
         if (instance == null) {
@@ -34,10 +40,13 @@ public class DBUtils {
     }
 
     /**
-     *
-     * @param username
-     * @param password
-     * @return
+     * This function check if the username and password are valid and exist in the DB:
+     * if it is a new user - insert the ClientData to the DB,
+     * if it is a exist user - load the user info from the DB.
+     * 
+     * @param username - (String) the name of the user.
+     * @param password - (String) the password of the user.
+     * @return clientData - (ClientData) info about the user.
      */
     public synchronized ClientData checkClientInDB(String username, String password) {
         Connection connection = null;
@@ -97,7 +106,12 @@ public class DBUtils {
         }
         return clientData;
     }
-
+    /**
+     * This function update the playlist popularity rank .
+     * 
+     * @param playlistId - (int) playlist identifier.
+     * @param change - (int) possible values 1,-1.
+     */
     public synchronized void updatePlaylistPopularity(int playlistId, int change) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -128,7 +142,12 @@ public class DBUtils {
             }
         }
     }
-
+    /**
+     * This function insert new playlist to the DB and save the client identifier.
+     * 
+     * @param clientId -(int) client identifier.
+     * @param playlistId -(int) playlist identifier.
+     */
     public synchronized void addFavoritePlaylistInDB(int clientId, int playlistId) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -159,7 +178,12 @@ public class DBUtils {
             }
         }
     }
-
+    /**
+     * This function remove an existing playlist from the database.
+     * 
+     * @param clientId -(int) client identifier.
+     * @param playlistId -(int) playlist identifier.
+     */
     public synchronized void removeFavoritePlaylistsDB(int clientId, int playlistId) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -190,13 +214,14 @@ public class DBUtils {
             }
         }
     }
-
     /**
-     *
-     * @param username
-     * @param email
-     * @param password
-     * @return
+     * This function update the user info in the DB.
+     * 
+     * @param username - (String) username identifier.
+     * @param email - (String) username email address.
+     * @param password - (String) username password.
+     * 
+     * @return true if the function success and false otherwise.
      */
     public synchronized boolean updateDB(String username, String email, String password) {
         Connection connection = null;
@@ -231,7 +256,11 @@ public class DBUtils {
         }
         return true;
     }
-
+   /**
+     * This function collect all types of genres from the DB. 
+     * 
+     * @return genres - (List[String]) list of all genres.
+     */
     public synchronized List<String> getAllGenres() {
         List<String> genres = null;
 
@@ -269,7 +298,15 @@ public class DBUtils {
         return genres;
     }
     
-
+    /**
+     * This function return list of song by critera(song/album/singer name) 
+     * and a searchFild string insert by the user.
+     * 
+     * @param c - (String) determine which kind of type the search would be from the option(song name/album name/artist name).
+     * @param searchField - (String) text that the user want to search in the DB.
+     * 
+     * @return selectedSongs - (List[Song]) list of songs that match the by the criteria and the searchField.  
+     */
     public List<Song> getSongsByCriteria(MakePlaylistModel.SEARCH_CRITERIA c, String searchField) {
         List<Song> selectedSongs = new ArrayList<>();
         Connection connection = null;
@@ -306,7 +343,13 @@ public class DBUtils {
         }
         return selectedSongs;
     }
-
+    /**
+     * This function return SQL quere by Criteria.
+     * 
+     * @param c - (Criteria)
+     * 
+     * @return (String) valid SQL quere. 
+     */
     private String getSQLViaCriteria(MakePlaylistModel.SEARCH_CRITERIA c) {
         switch (c) {
             case SONG_NAME:
@@ -328,7 +371,13 @@ public class DBUtils {
                 return "";
         }
     }
-
+    /**
+     * This function return the next song.
+     * 
+     * @param result -(ResultSet) 
+     *
+     * @return s - (Song) next song
+     */
     private Song getNextSong(ResultSet result) {
         Song s = null;
         try {
@@ -345,7 +394,14 @@ public class DBUtils {
         }
         return s;
     }
-
+    /**
+     * This function return the playlist list from which the user could choose.
+     * 
+     * @param isAdmin - (boolean) true if it's an admin playlist, false otherwise.
+     * @param f - (FILTER) could get the values: POPULARITY, RECENT or FAVORITE.
+     * 
+     * @return playlists - (List[Playlist]) list of possible playlists.
+     */
     public synchronized List<Playlist> getPlaylists(boolean isAdmin, FILTER f) {
         List<Playlist> playlists = new ArrayList<>();
         Connection connection = null;
@@ -404,7 +460,17 @@ public class DBUtils {
         }
         return playlists;
     }
-
+    /**
+     * This function create new playlist.
+     * 
+     * @param res - (ResultSet) 
+     * @param connection - (Connection)
+     * @param statement - (PreparedStatement)
+     *
+     * @return songs - (List[song]) list of songs that create the playlist.
+     * 
+     * @throws SQLException 
+     */
     private List<Song> createPlaylistSongs(ResultSet res, Connection connection, PreparedStatement statement) throws SQLException {
         List<Song> songs = new ArrayList<>();
         String songsSql = "SELECT songs.id, songs.name, songs.duration, songs.year_released, songs.url, singers.name, albums.name\n"
@@ -421,7 +487,14 @@ public class DBUtils {
         }
         return songs;
     }
-
+    /**
+     * This function generate new playlist fron the DB.
+     * 
+     * @param res - (ResultSet)
+     * @param songs - (List[song]) list of songs that create the playlist.
+     *
+     * @return p - (Playlist) 
+     */
     private Playlist createPlaylistFromDB(ResultSet res, List<Song> songs) {
         Playlist p = null;
         try {
@@ -436,7 +509,13 @@ public class DBUtils {
         }
         return p;
     }
-
+    /**
+     * This function converte Blob into Image.
+     * 
+     * @param blob -(Blob) 
+     * 
+     * @return is - (Image) converted
+     */
     private Image convertBlobToImage(Blob blob) {
         InputStream is = null;
         try {
@@ -447,7 +526,16 @@ public class DBUtils {
         }
         return new Image(is);
     }
-
+    /**
+     * This function insert new playlist into te DB
+     * 
+     * @param name - (String) playlist name
+     * @param blob - (ByteArrayInputStream) playlist image
+     * @param songs - (list[Song]) list of songs
+     * @param creatorId - (int) id number of the creator of the playlist
+     * 
+     * @return res - (boolean) true if success , false otherwish.
+     */
     public boolean insertPlaylist(String name, ByteArrayInputStream blob, List<Song> songs, int creatorId) {
         boolean res;
         int newPlaylistId = insertPlaylistMetaData(name, blob, creatorId);
@@ -458,7 +546,15 @@ public class DBUtils {
         return res;
 
     }
-
+    /**
+     * This function insert the mata data of the playlist
+     * 
+     * @param name - (String) playlist name
+     * @param blob - (ByteArrayInputStream) playlist image
+     * @param creatorId - (int) id number of the creator of the playlist
+     * 
+     * @return newPlaylistID - (int) the playlist new ID.
+     */
     private int insertPlaylistMetaData(String name, ByteArrayInputStream blob, int creatorId) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -501,7 +597,14 @@ public class DBUtils {
         }
         return newPlaylistID;
     }
-
+    /**
+     * This function insert the playlist details
+     * 
+     * @param newPlaylistId - (int) he playlist new ID.
+     * @param songs - (List[song]) list of songs that create the playlist.
+     * 
+     * @return true if success, and false otherwise.
+     */
     private boolean insertPlaylistDetails(int newPlaylistId, List<Song> songs) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -537,5 +640,3 @@ public class DBUtils {
         return true;
     }
 }
-//Image img = new Image(ImageIO.read(new ByteArrayInputStream(
-//playListResult.getBlob("playlistImg").getBytes(1, playListResult.getBlob("playlistImg").length()))))

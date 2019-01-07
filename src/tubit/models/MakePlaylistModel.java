@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tubit.models;
 
 import java.awt.image.BufferedImage;
@@ -19,26 +14,37 @@ import javafx.scene.image.Image;
 import javax.imageio.ImageIO;
 
 /**
- *
- * @author Ofir
+ * This class handle the model of making playlist.
+ * 
  */
 public class MakePlaylistModel {
     public enum SEARCH_CRITERIA {
         SONG_NAME, SINGER_NAME, ALBUM_NAME, DEFAULT;
     }
+    /**
+     * Default constractor.
+     */
     public MakePlaylistModel() {
         
     }
-    
+    /**
+     * This function extract songs from the DB. 
+     *
+     * @param c - (SEARCH_CRITERIA)
+     * @param searchingText - (String) 
+     *
+     * @return (List[Song]) list of songs.
+     */
     public List<Song> extractSongs(SEARCH_CRITERIA c, String searchingText) {
         return DBUtils.getInstance().getSongsByCriteria(c, searchingText);
-        /*List<Song> testList = new ArrayList<>();
-        testList.add(new Song(1,"Yeahh baby", 215, 2016, "DJ Kaled", "LEchkikon", null));
-        testList.add(new Song(2,"One day in your mouth", 199, 2015, "dsads", "Yohanis", null));
-        testList.add(new Song(3,"Me and you", 300, 2019, "TZOOZI", "Hopa", null));
-        return testList;*/
     }
-    
+    /**
+     * This function get the attribute.
+     *
+     * @param c - (SEARCH_CRITERIA)
+     *
+     * @return (String) SQL attribute
+     */
     String getAttribute(SEARCH_CRITERIA c) {
         switch (c) {
             case SONG_NAME:
@@ -52,11 +58,26 @@ public class MakePlaylistModel {
                 
         }
     }
-    
+    /**
+     * This function upload new playlist to the DB.
+     * 
+     * @param name - (String) playlist name
+     * @param blob - (ByteArrayInputStream) playlist image
+     * @param songs - (list[Song]) list of songs
+     * @param creatorId - (int) id number of the creator of the playlist
+     * 
+     * @return true if success , false otherwish.
+     */
     public boolean uploadPlaylistToDB(String name, ByteArrayInputStream blob, List<Song> songs, int creatorId) {
         return DBUtils.getInstance().insertPlaylist(name, blob, songs, creatorId);
     }
-    
+    /**
+     * This function get the blob.
+     * 
+     * @param img - (Image) 
+     *
+     * @return (Blob) image convarted
+     */
     public ByteArrayInputStream getBlob(Image img) {
         ByteArrayOutputStream baos = null;
         try {

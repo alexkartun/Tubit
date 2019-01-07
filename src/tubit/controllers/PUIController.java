@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tubit.controllers;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -23,9 +18,9 @@ import tubit.models.Playlist;
 import tubit.models.Song;
 
 /**
- * FXML Controller class
+ * This class is the player controller.
+ * Extends TubitBaseController.
  *
- * @author Kartun
  */
 public class PUIController extends TubitBaseController {
 
@@ -52,13 +47,20 @@ public class PUIController extends TubitBaseController {
     private WebView youtubeWebView;
     @FXML
     private FontAwesomeIcon rateBtn;
-
+    /**
+     * This function initializes the controller class.
+     * 
+     * @param url - (URL) 
+     * @param rb - (ResourceBundle)
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         makeStageDraggable();
         init();
     }
-
+    /**
+     * This function initialize the player.
+     */
     private void init() {
         if (PlaylistChooserUIController.chosenPlaylist.getIsAdmin()) {
             rateLbl.setVisible(false);
@@ -73,7 +75,9 @@ public class PUIController extends TubitBaseController {
         bindTablesColumns();
         fillPlaylistTable();
     }
-
+    /**
+     * This function bind between the table columns.
+     */    
     private void bindTablesColumns() {
         songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
         singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
@@ -81,16 +85,28 @@ public class PUIController extends TubitBaseController {
         duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         year.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
-
+    /**
+     * This function fill the playlist table.
+     */
     private void fillPlaylistTable() {
         songs.setItems(FXCollections.observableArrayList(PlaylistChooserUIController.chosenPlaylist.getSongsList()));
     }
-
+    /**
+     * This function get back the PlaylistChooserUI.fxml
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void backToPlaylistChooser(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
-    
+    /**
+     * This function play song.
+     * 
+     * @param chosenSong - (Song) song to play.
+     */
     private void playSong(Song chosenSong) {
         if (chosenSong != null) {
             if (youtubeWebView == null) {
@@ -104,7 +120,11 @@ public class PUIController extends TubitBaseController {
             youtubeWebView.getEngine().load(chosenSong.getUrl());
         }
     }
-    
+    /**
+     * This function play first song by double click.
+     * 
+     * @param event - (MouseEvent) mouse click event. 
+     */
     @FXML
     private void playSongFirstOption(MouseEvent event) {
         if (event.getClickCount() == 2) {
@@ -112,13 +132,21 @@ public class PUIController extends TubitBaseController {
             playSong(chosenSong);
         }
     }
-    
+    /**
+     * This function play second option song.
+     * 
+     * @param event - (MouseEvent) mouse click event.
+     */
     @FXML
     private void playSongSecondOption(MouseEvent event) {
         Song chosenSong = songs.getSelectionModel().getSelectedItem();
         playSong(chosenSong);
     }
-
+    /**
+     * This function handle the rating song option.
+     * 
+     * @param event - (MouseEvent) mouse click event  
+     */
     @FXML
     private void ratePlaylist(MouseEvent event) {
         double opacity = 1.0;

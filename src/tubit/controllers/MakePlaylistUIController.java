@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tubit.controllers;
 
 import com.jfoenix.controls.JFXTextField;
@@ -32,9 +27,9 @@ import tubit.models.MakePlaylistModel.SEARCH_CRITERIA;
 import tubit.models.Song;
 
 /**
- * FXML Controller class
- *
- * @author Ofir
+ * This class generate new playlist.
+ * Extends TubitBaseController.
+ * 
  */
 public class MakePlaylistUIController extends TubitBaseController {
 
@@ -85,7 +80,10 @@ public class MakePlaylistUIController extends TubitBaseController {
     ByteArrayInputStream picBlob;
 
     /**
-     * Initializes the controller class.
+     * This function initializes the controller class.
+     * 
+     * @param url - (URL) 
+     * @param rb - (ResourceBundle)
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -96,12 +94,24 @@ public class MakePlaylistUIController extends TubitBaseController {
         playlistPhoto.setImage(defaultImage);
         picBlob = model.getBlob(defaultImage);
     }
-
+    /**
+     * This function get back the PlaylistChooserUI.fxml
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void backToPlaylistChooser(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/PlaylistChooserUI.fxml");
     }
-
+    /**
+     * This function add new song into the playlist.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void addSongToPlaylist(MouseEvent event) throws IOException {
         Song chosenSong = queriedSongsTable.getSelectionModel().getSelectedItem();
@@ -113,14 +123,26 @@ public class MakePlaylistUIController extends TubitBaseController {
         queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
         playlistSongsTable.setItems(FXCollections.observableArrayList(c_chosenSongs));
     }
-
+    /**
+     * This function extract songs from playlist.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void extractSongs(MouseEvent event) throws IOException {
         c_queriedSongs = model.extractSongs(getSearchCriteria(), capitalize(searchField.getText()));
         removeAlreadyChosenSongs();
         queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
     }
-
+    /**
+     * This functon capitalize strings
+     * 
+     * @param str - (String) 
+     * 
+     * @return new string with capital letters.
+     */
     public static String capitalize(String str) {
         String words[] = str.replaceAll("\\s+", " ").trim().split(" ");
         String newSentence = "";
@@ -133,7 +155,13 @@ public class MakePlaylistUIController extends TubitBaseController {
 
         return newSentence.substring(0, newSentence.length() - 1);
     }
-
+    /**
+     * This function update the playlist image.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     *
+     * @throws IOException 
+     */
     @FXML
     private void uploadPhoto(MouseEvent event) throws IOException {
         JFileChooser picChooser = new JFileChooser("C:\\Users\\Ofir\\Documents\\NetBeansProjects\\Tubit");
@@ -149,7 +177,13 @@ public class MakePlaylistUIController extends TubitBaseController {
             picBlob = model.getBlob(fixedSizeImage);
         }
     }
-
+    /**
+     * This function remove songs from playlist.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void removeChosen(MouseEvent event) throws IOException {
         Song removedSong = playlistSongsTable.getSelectionModel().getSelectedItem();
@@ -157,7 +191,12 @@ public class MakePlaylistUIController extends TubitBaseController {
         playlistSongsTable.setItems(FXCollections.observableArrayList(c_chosenSongs));
         removeChosen.setDisable(true);
     }
-
+    /**
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void enableRemoveButton(MouseEvent event) throws IOException {
         Song chosenSong = playlistSongsTable.getSelectionModel().getSelectedItem();
@@ -165,7 +204,13 @@ public class MakePlaylistUIController extends TubitBaseController {
             removeChosen.setDisable(false);
         }
     }
-
+    /**
+     * This function create a new playlist.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void createPlaylist(MouseEvent event) throws IOException {
         int creatorId = PlaylistChooserUIController.clientData.id;
@@ -183,7 +228,11 @@ public class MakePlaylistUIController extends TubitBaseController {
         }
         JOptionPane.showMessageDialog(null, message);
     }
-
+    /**
+     * This function get he search criteria
+     * 
+     * @return criteria if success, null otherwise.
+     */
     private SEARCH_CRITERIA getSearchCriteria() {
         RadioButton selectedRadioButton = (RadioButton) songSearchingSubject.getSelectedToggle();
         String filter = selectedRadioButton.getText();
@@ -198,7 +247,9 @@ public class MakePlaylistUIController extends TubitBaseController {
         // unreachable code.
         return null;
     }
-
+    /**
+     * This function bind between the table columns.
+     */
     private void bindTablesColumns() {
         q_songName.setCellValueFactory(new PropertyValueFactory<>("songName"));
         q_singerName.setCellValueFactory(new PropertyValueFactory<>("singerName"));
@@ -211,7 +262,9 @@ public class MakePlaylistUIController extends TubitBaseController {
         p_duration.setCellValueFactory(new PropertyValueFactory<>("duration"));
         p_year.setCellValueFactory(new PropertyValueFactory<>("year"));
     }
-
+    /**
+     * This function remove songs that allready chosen from the playlist.
+     */
     private void removeAlreadyChosenSongs() {
         List<Song> toBeRemoved = new ArrayList<>();
         // iterate through queried list without modifing it on the same time.

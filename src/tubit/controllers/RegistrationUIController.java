@@ -5,10 +5,13 @@ import com.jfoenix.controls.JFXTextField;
 import db.DBUtils;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 
+/**
+ * This class is the registration controller.
+ * Extends TubitBaseController.
+ *
+ */
 public class RegistrationUIController extends TubitBaseController {
     
     
@@ -20,12 +23,25 @@ public class RegistrationUIController extends TubitBaseController {
     private JFXPasswordField passwordInput;
     @FXML
     private JFXPasswordField confirmPasswordInput;
-
+    
+    /**
+     * This function get back the MainUI.fxml
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void backToMenu(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/MainUI.fxml");
     }
-
+    /**
+     * This function handle the registration action.
+     * 
+     * @param event - (MouseEvent) mouse click event.
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void registrationAction(MouseEvent event) throws IOException {
         String username = this.usernameInput.getText();
@@ -42,7 +58,16 @@ public class RegistrationUIController extends TubitBaseController {
             }
         }
     }
-
+    /**
+     * This function check if the inputs are valid.
+     * 
+     * @param username - (String) user name
+     * @param email - (String) user email
+     * @param password - (Sring) user password
+     * @param confirmPassword - (Sring) user password
+     *
+     * @return true if valid, false otherwise.
+     */
     private boolean validateInputs(String username, String email, String password, String confirmPassword) {
         boolean correctInputs = true;
         if (username.isEmpty()) {

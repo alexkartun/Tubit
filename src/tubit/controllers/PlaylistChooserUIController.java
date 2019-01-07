@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tubit.controllers;
 
 import java.io.IOException;
@@ -23,9 +18,9 @@ import tubit.models.Playlist;
 import tubit.models.PlaylistChooserModel.FILTER;
 
 /**
- * FXML Controller class
- *
- * @author Ofir
+ * This class play chooser playlist.
+ * Extends TubitBaseController.
+ * 
  */
 public class PlaylistChooserUIController extends TubitBaseController {
 
@@ -45,7 +40,9 @@ public class PlaylistChooserUIController extends TubitBaseController {
     HBox userPlaylists;
     @FXML
     ToggleGroup userPlaylistFilter;
-
+    /**
+     * Constractor
+     */
     public PlaylistChooserUIController() {
         clientData = MainUIController.client;
         model = new PlaylistChooserModel();
@@ -56,14 +53,21 @@ public class PlaylistChooserUIController extends TubitBaseController {
         admin_playlist_current = 0;
         user_playlist_current = 0;
     }
-
+    /**
+     * This function initializes the controller class.
+     * 
+     * @param location - (URL) 
+     * @param resources - (ResourceBundle)
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         makeStageDraggable();
         init(FILTER.ADMIN);
         init(getFilter());
     }
-
+    /**
+     * This function initialize the playlist chooser.
+     */
     private void init(FILTER f) {
         switch (f) {
             case ADMIN:
@@ -81,7 +85,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
 
         }
     }
-
+    /**
+     * This function generate new ImageViews.
+     * 
+     * @param playlistsHbox - (HBox) 
+     * @param playlists - (List[Playlist]) list of playlists.
+     * @param offset - (int) 
+     */
     private void generateImageViews(HBox playlistsHbox, List<Playlist> playlists, int offset) {
         playlistsHbox.getChildren().clear();
         for (int i = offset; i < playlists.size(); i++) {
@@ -92,7 +102,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
             playlistsHbox.getChildren().add(createImageView(playlist));
         }
     }
-
+    /**
+     * This function create new ImageView.
+     * 
+     * @param p -(Playlist) 
+     * 
+     * @return view - (ImageView) the image for the playlist.
+     */
     private ImageView createImageView(Playlist p) {
         ImageView view = new ImageView(p.getImage());
         view.setFitWidth(80.0);
@@ -107,7 +123,11 @@ public class PlaylistChooserUIController extends TubitBaseController {
         });
         return view;
     }
-
+    /**
+     * This function get the choosen FILTER.
+     * 
+     * @return filter - (FILTER)  
+     */
     private FILTER getFilter() {
         RadioButton selectedRadioButton = (RadioButton) userPlaylistFilter.getSelectedToggle();
         String filter = selectedRadioButton.getText();
@@ -122,19 +142,37 @@ public class PlaylistChooserUIController extends TubitBaseController {
                 return FILTER.ADMIN;
         }
     }
-
+    /**
+     *  This function change the current FILTER.
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void changeFilter(MouseEvent event) throws IOException {
         // back current position user playlists to start
         user_playlist_current = 0;
         init(getFilter());
     }
-
+    /**
+     * This function get back the MainUI.fxml
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void backToMenu(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/MainUI.fxml");
     }
-
+    /**
+     * This functon handle the admin backward list
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void admin_backwardList(MouseEvent event) throws IOException {
         if (admin_playlist_current > 0) {
@@ -142,7 +180,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
             init(FILTER.ADMIN);
         }
     }
-
+    /**
+     * This functon handle the admin forward list
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void admin_forwardList(MouseEvent event) throws IOException {
         if (admin_playlist_current + NUM_OF_SHOWN_PLAYLISTS < c_moodsPlaylists.size()) {
@@ -151,7 +195,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
             //initPlaylistMap(++admin_playlist_current, user_playlist_current, getUserFilter());
         }
     }
-
+    /**
+     * This functon handle the user backward list
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void user_backwardList(MouseEvent event) throws IOException {
         if (user_playlist_current > 0) {
@@ -159,7 +209,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
             init(getFilter());
         }
     }
-
+    /**
+     * This functon handle the user forward list
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void user_forwardList(MouseEvent event) throws IOException {
         int userPlaylistSize = getPlaylistSize();
@@ -168,7 +224,11 @@ public class PlaylistChooserUIController extends TubitBaseController {
             init(getFilter());
         }
     }
-    
+    /**
+     * This function get the playlist size.
+     * 
+     * @return (int) the number of songs in the playlist. 
+     */
     private int getPlaylistSize() {
         FILTER f = getFilter();
         switch (f) {
@@ -181,7 +241,13 @@ public class PlaylistChooserUIController extends TubitBaseController {
         }
         return -1;
     }
-
+    /**
+     * This function get back the MakePlaylistUI.fxml
+     * 
+     * @param event - (MouseEvent) mouse click event
+     * 
+     * @throws IOException 
+     */
     @FXML
     private void gotoPlaylistMaker(MouseEvent event) throws IOException {
         refreshPage("/tubit/views/MakePlaylistUI.fxml");
