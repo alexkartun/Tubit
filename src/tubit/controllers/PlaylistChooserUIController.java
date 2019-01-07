@@ -116,7 +116,7 @@ public class PlaylistChooserUIController extends TubitBaseController {
         view.setOnMouseClicked((event) -> {
             try {
                 chosenPlaylist = p;
-                refreshPage("/tubit/views/PUI.fxml");
+                refreshPage("/tubit/views/PlayerUI.fxml");
             } catch (IOException ex) {
                 Logger.getLogger(PlaylistChooserUIController.class.getName()).log(Level.SEVERE, null, ex);
             }

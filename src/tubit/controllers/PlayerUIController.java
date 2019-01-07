@@ -11,10 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebView;
-import tubit.models.Playlist;
 import tubit.models.Song;
 
 /**
@@ -22,7 +20,7 @@ import tubit.models.Song;
  * Extends TubitBaseController.
  *
  */
-public class PUIController extends TubitBaseController {
+public class PlayerUIController extends TubitBaseController {
 
     @FXML
     private Pane pane;

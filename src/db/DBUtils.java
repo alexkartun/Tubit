@@ -6,14 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.InputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.image.Image;
+import org.codehaus.jackson.map.ObjectMapper;
 import tubit.models.ClientData;
 import tubit.models.MakePlaylistModel;
 import tubit.models.Playlist;
@@ -29,12 +26,12 @@ public class DBUtils {
     // singleton
     private static DBUtils instance;
     // path for DB configurations file.
-    private final String DBCONFIG_PATH = "config.ser";
+    private final String DBCONFIG_PATH = "config.json";
     // default properties for config.
     private final String DEFAULT_JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private final String DEFAULT_DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
     private final String DEFAULT_USER = "root";
-    private final String DEFAULT_PASS = "204717664";
+    private final String DEFAULT_PASS = "alex1992";
     
     private DBConfig config;
     /**
@@ -50,52 +47,34 @@ public class DBUtils {
     }
     
     private DBUtils() {
-        this.config = new DBConfig(DEFAULT_USER, DEFAULT_DB_URL, DEFAULT_USER, DEFAULT_PASS);
-        if (isConfigExists()) {
-            readConfig();
+        if (new File(DBCONFIG_PATH).exists()) {
+            loadConfig();
         } else {
-            storeDefaultConfig();
+            saveConfig();
         }
-    }
-    
-    /**
-     * checks if DB configuration file is already stores.
-     * @return true if exists.
-     */
-    private boolean isConfigExists() {
-        File f = new File(DBCONFIG_PATH);
-        return f.exists();
     }
     
     /**
      * reads DB configuration file and sets "config" member. 
      */
-    private void readConfig() {
-        FileInputStream fis = null;
-        ObjectInput in = null;
+    private void loadConfig() {
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            fis = new FileInputStream(DBCONFIG_PATH);
-            in = new ObjectInputStream(fis);
-            this.config = (DBConfig) in.readObject();
-            in.close();
-        } catch (Exception ex) {
+            config = mapper.readValue(new File(DBCONFIG_PATH), DBConfig.class);
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
     
     /**
-     * saves default configuration in a file as a serializable.
+     * save configuration in a file as a json.
      */
-    private void storeDefaultConfig() {
-        FileOutputStream fos = null;
-        ObjectOutputStream out = null;
+    private void saveConfig() {
+        ObjectMapper mapper = new ObjectMapper();
+        config = new DBConfig(DEFAULT_USER, DEFAULT_PASS, DEFAULT_DB_URL);
         try {
-            fos = new FileOutputStream(DBCONFIG_PATH);
-            out = new ObjectOutputStream(fos);
-            out.writeObject(this.config);
-
-            out.close();
-        } catch (Exception ex) {
+            mapper.writeValue(new File(DBCONFIG_PATH), config);
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
@@ -115,7 +94,7 @@ public class DBUtils {
         ClientData clientData = null;
         List<Playlist> playlists = new ArrayList<>();
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "SELECT clients.id, COUNT(*) as TOTAL FROM clients WHERE username=? AND password=?";
             statement = connection.prepareStatement(sql);
@@ -177,7 +156,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "UPDATE playlists SET popularity = popularity + ? WHERE id = ?";
             statement = connection.prepareStatement(sql);
@@ -213,7 +192,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "INSERT INTO favorite_playlists(clientId,playlistId) VALUES(?,?)";
             statement = connection.prepareStatement(sql);
@@ -249,7 +228,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "DELETE FROM favorite_playlists WHERE favorite_playlists.clientId = ? AND favorite_playlists.playlistId = ?";
             statement = connection.prepareStatement(sql);
@@ -288,7 +267,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "INSERT INTO clients(username,email,password) VALUES(?,?,?)";
             statement = connection.prepareStatement(sql);
@@ -328,7 +307,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "SELECT DISTINCT genre FROM singers";
             statement = connection.prepareStatement(sql);
@@ -373,7 +352,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = getSQLViaCriteria(c);
             statement = connection.prepareStatement(sql);
@@ -467,7 +446,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String playListsSql = null;
             if (null != f) switch (f) {
@@ -620,7 +599,7 @@ public class DBUtils {
         PreparedStatement statement = null;
         int newPlaylistID = -1;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             String sql = "INSERT INTO playlists(name,popularity,image,is_admin_made,creatorId) VALUES(?,?,?,?,?)";
             statement = connection.prepareStatement(sql);
@@ -669,7 +648,7 @@ public class DBUtils {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            Class.forName(config.getJdbcDriver());
+            Class.forName(DEFAULT_JDBC_DRIVER);
             connection = DriverManager.getConnection(config.getDBUrl(), config.getUser(), config.getPassword());
             for (Song s : songs) { // a record for each song in the playlist.
                 String sql = "INSERT INTO playlists_songs(playlistId, songId) VALUES(?,?)";

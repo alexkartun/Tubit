@@ -68,11 +68,6 @@
                         <Font size="14.0" />
                     </font>
                 </JFXPasswordField>
-                <Label layoutX="241.0" layoutY="381.0" styleClass="forgetBtn" text="Forget Password?" textFill="#a3a3a3">
-                    <font>
-                        <Font name="Ebrima" size="14.0" />
-                    </font>
-                </Label>
                 <JFXButton buttonType="RAISED" layoutX="50.0" layoutY="419.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#loginAction" prefHeight="50.0" prefWidth="300.0" ripplerFill="#36a5ff" styleClass="loginBtn" text="Login">
                     <font>
                         <Font name="System Bold" size="14.0" />

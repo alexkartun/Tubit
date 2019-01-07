@@ -44,10 +44,7 @@ public class MainUIController extends TubitBaseController {
         if (validateInputs(username, password)) {
             client = DBUtils.getInstance().checkClientInDB(username, password);
             if (client.status) {
-                System.out.println("Connected");
                 refreshPage("/tubit/views/PlaylistChooserUI.fxml");
-            } else {
-                 System.out.println("Not");
             }
         }
     }

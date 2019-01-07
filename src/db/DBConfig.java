@@ -5,48 +5,36 @@
  */
 package db;
 
-import java.io.Serializable;
-
 /**
  * DB configuration class.
  * stores properties to connect to mySQL database.
  * implements Serializable for storing and reading from .ser file as an object.
  */
-public class DBConfig implements Serializable {
-    private String jdbcDriver;
+public class DBConfig {
     private String dbUrl;
     private String user;
     private String password;
     
     /**
      * Simple c-tor.
-     * @param drv
      * @param url
      * @param usr
      * @param pass 
      */
-    public DBConfig(String drv, String url, String usr, String pass) {
-        this.jdbcDriver = drv;
+    public DBConfig(String usr, String pass, String url) {
         this.dbUrl = url;
         this.user = usr;
         this.password = pass;
     }
     
     /**
-     * jdbcDriver getter.
-     * @return 
+     * dummy c-tor.
+     * @param url
+     * @param usr
+     * @param pass 
      */
-    public String getJdbcDriver() {
-        return this.jdbcDriver;
-    }
+    public DBConfig() { }
     
-    /**
-     * jdbcDriver setter.
-     * @param drv 
-     */
-    public void setJdbcDriver(String drv) {
-        this.jdbcDriver = drv;
-    }
     
     /**
      * dbUrl getter.

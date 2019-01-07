@@ -50,11 +50,7 @@ public class RegistrationUIController extends TubitBaseController {
         String confirmPassword = this.confirmPasswordInput.getText();
         if (validateInputs(username, email, password, confirmPassword)) {
             if (DBUtils.getInstance().updateDB(username, email, password)) {
-                //TODO: Game menu
-                System.out.println("Connected");
                 refreshPage("/tubit/views/MainUI.fxml");
-            } else {
-                 System.out.println("Not");
             }
         }
     }
