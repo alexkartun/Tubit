@@ -220,7 +220,7 @@ public class PlaylistChooserUIController extends TubitBaseController {
     private void user_forwardList(MouseEvent event) throws IOException {
         int userPlaylistSize = getPlaylistSize();
         if (user_playlist_current + NUM_OF_SHOWN_PLAYLISTS < userPlaylistSize) {
-            user_playlist_current--;
+            user_playlist_current++;
             init(getFilter());
         }
     }
