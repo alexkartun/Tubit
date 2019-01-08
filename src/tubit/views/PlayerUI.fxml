@@ -77,18 +77,18 @@
                         </TableView>
                     </children>
                 </VBox>
-                <FontAwesomeIcon iconName="PLAY" layoutX="394.0" layoutY="75.0" onMouseClicked="#playSongSecondOption" size="50" stroke="WHITE" styleClass="playBtn" />
-                <FontAwesomeIcon fx:id="rateBtn" fill="#ffd400" iconName="STAR" layoutX="506.0" layoutY="67.0" onMouseClicked="#ratePlaylist" opacity="0.3" size="25" stroke="WHITE" />
-            <Label layoutX="357.0" layoutY="50.0" text="Play" textFill="#a3a3a3">
-               <font>
-                  <Font name="Ebrima Bold" size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="rateLbl" layoutX="466.0" layoutY="50.0" text="Rate" textFill="#a3a3a3">
-               <font>
-                  <Font name="Ebrima Bold" size="14.0" />
-               </font>
-            </Label>
+                <FontAwesomeIcon iconName="PLAY" layoutX="498.0" layoutY="88.0" onMouseClicked="#playSongSecondOption" size="50" stroke="WHITE" styleClass="playBtn" />
+                <FontAwesomeIcon fx:id="rateBtn" fill="#ffd400" iconName="STAR" layoutX="506.0" layoutY="47.0" onMouseClicked="#ratePlaylist" opacity="0.3" size="25" stroke="WHITE" />
+                <Label layoutX="389.0" layoutY="62.0" text="Play" textFill="#a3a3a3">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="rateLbl" layoutX="389.0" layoutY="30.0" text="Add to favorites" textFill="#a3a3a3">
+                    <font>
+                        <Font name="Ebrima Bold" size="14.0" />
+                    </font>
+                </Label>
             </children>
         </Pane>
     </children>
