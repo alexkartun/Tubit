@@ -164,14 +164,13 @@ public class MakePlaylistUIController extends TubitBaseController {
      */
     @FXML
     private void uploadPhoto(MouseEvent event) throws IOException {
-        JFileChooser picChooser = new JFileChooser("C:\\Users\\Ofir\\Documents\\NetBeansProjects\\Tubit");
+        JFileChooser picChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG photos only", "png");
         picChooser.setFileFilter(filter);
         picChooser.setApproveButtonText("Choose playlist photo");
         int returnVal = picChooser.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String imagePath = picChooser.getSelectedFile().getPath();
-            //Image image = SwingFXUtils.toFXImage(ImageIO.read(file), null); // convert file to image
             Image fixedSizeImage = new Image("file:\\\\\\" + imagePath, 100.0, 100.0, false, false);
             playlistPhoto.setImage(fixedSizeImage);
             picBlob = model.getBlob(fixedSizeImage);
@@ -222,6 +221,7 @@ public class MakePlaylistUIController extends TubitBaseController {
             boolean res = model.uploadPlaylistToDB(name, picBlob, c_chosenSongs, creatorId);
             if (res == true) {
                 message = "'" + name + "' playlist has been saved!";
+                refreshPage("/tubit/views/PlaylistChooserUI.fxml");
             } else {
                 message = "Error occured! playlist has not been saved";
             }
