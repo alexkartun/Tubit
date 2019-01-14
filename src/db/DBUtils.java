@@ -29,9 +29,9 @@ public class DBUtils {
     private final String DBCONFIG_PATH = "config.json";
     // default properties for config.
     private final String DEFAULT_JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private final String DEFAULT_DB_URL = "jdbc:mysql://localhost:3306/tubitdb?useSSL=false";
-    private final String DEFAULT_USER = "root";
-    private final String DEFAULT_PASS = "alex1992";
+    private final String DEFAULT_DB_URL = "jdbc:mysql://127.0.0.1:3306/team13?useSSL=false";
+    private final String DEFAULT_USER = "team13";
+    private final String DEFAULT_PASS = "1ax3p";
     
     private DBConfig config;
     /**

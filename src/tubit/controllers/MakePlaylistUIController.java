@@ -132,9 +132,15 @@ public class MakePlaylistUIController extends TubitBaseController {
      */
     @FXML
     private void extractSongs(MouseEvent event) throws IOException {
-        c_queriedSongs = model.extractSongs(getSearchCriteria(), capitalize(searchField.getText()));
-        removeAlreadyChosenSongs();
-        queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
+        String searchText = searchField.getText();
+        if (!searchText.equals("")) {
+            c_queriedSongs = model.extractSongs(getSearchCriteria(), capitalize(searchField.getText()));
+            removeAlreadyChosenSongs();
+            queriedSongsTable.setItems(FXCollections.observableArrayList(c_queriedSongs));
+        } else {
+            
+        }
+        
     }
     /**
      * This functon capitalize strings
